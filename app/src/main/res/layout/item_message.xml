@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <!-- 系統訊息（左側） -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageAvatarLeft"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_custom_service_girl"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircleImageView" />
+
+    <TextView
+        android:id="@+id/textMessageLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_message_left"
+        android:padding="8dp"
+        android:textColor="#000000"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/imageAvatarLeft"
+        app:layout_constraintTop_toTopOf="@id/imageAvatarLeft" />
+
+    <TextView
+        android:id="@+id/textTimeLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="#888888"
+        android:visibility="gone"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/textMessageLeft"
+        app:layout_constraintBottom_toBottomOf="@id/textMessageLeft" />
+
+    <!-- 使用者訊息（右側，無頭像） -->
+    <TextView
+        android:id="@+id/textMessageRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_message_right"
+        android:padding="8dp"
+        android:textColor="#000000"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textTimeRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="#888888"
+        android:visibility="gone"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toStartOf="@id/textMessageRight"
+        app:layout_constraintBottom_toBottomOf="@id/textMessageRight" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
