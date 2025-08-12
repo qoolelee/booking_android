@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
-        android:background="#2196F3">
+        android:background="#f7f7f7">
 
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Booking.AI"
-            android:textColor="#FFFFFF"
+            android:textColor="#222222"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -30,7 +30,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="16dp"
-        android:background="#eaeaea"
+        android:background="#ffffff"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <!-- 輸入訊息區 -->
@@ -39,22 +39,38 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:background="#EEEEEE">
+        android:gravity="center"
+        android:background="#ffffff">
 
         <EditText
             android:id="@+id/editTextMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="輸入訊息"
+            android:hint="@string/input_message"
             android:padding="8dp"
             android:background="@drawable/edittext_background"
             android:layout_marginEnd="8dp" />
 
-        <Button
+        <ImageButton
+            android:id="@+id/buttonMic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:src="@android:drawable/ic_btn_speak_now"
+            android:scaleType="centerInside"
+            android:contentDescription="Record voice"
+            app:tint="#666666"
+            android:layout_marginEnd="8dp" />
+
+        <ImageButton
             android:id="@+id/buttonSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="送出" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_gray_background"
+            android:src="@drawable/arrow_upward_24dp"
+            android:scaleType="centerInside"
+            android:contentDescription="Send message"
+            app:tint="#666666" />
     </LinearLayout>
 </LinearLayout>

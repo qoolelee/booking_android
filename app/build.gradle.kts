@@ -57,4 +57,6 @@ dependencies {
     // Add the dependency for the Firebase AI Logic library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-ai")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }

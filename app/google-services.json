@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "508189109927",
+    "project_id": "booking-5ce2f",
+    "storage_bucket": "booking-5ce2f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508189109927:android:e4f92e5867616b7b7bf582",
+        "android_client_info": {
+          "package_name": "tw.com.kooler.booking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC18oTKtHVegtKjTcBiHsP9R7TrRo7cFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

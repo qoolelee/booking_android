@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">booking</string>
+    <string name="input_message">輸入訊息</string>
 </resources>
