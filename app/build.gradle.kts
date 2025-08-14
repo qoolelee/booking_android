@@ -1,7 +1,10 @@
 plugins {
     //id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 }
@@ -39,6 +42,12 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    // 添加 Kotlin Serialization 依賴
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -59,4 +68,6 @@ dependencies {
     implementation("com.google.firebase:firebase-ai")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+
 }
