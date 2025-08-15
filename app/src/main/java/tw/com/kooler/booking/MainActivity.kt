@@ -30,6 +30,9 @@ import androidx.room.Room
 import com.google.firebase.ai.type.FunctionDeclaration
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.Tool
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -65,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         // 載入儲存的訊息
         lifecycleScope.launch {
-            loadMessagesFromRoom()
+            // loadMessagesFromRoom()
             // 在載入訊息後初始化 AI
             initAI()
         }
@@ -117,10 +120,43 @@ class MainActivity : AppCompatActivity() {
                     val id = getRoomTypesFunction.args["id"].toString()
                     val checkinDate = getRoomTypesFunction.args["checkinDate"].toString()
                     val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
+
                     val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
 
                     // 前對話+" has room types " + 將回傳結果轉換為字串
-                    text = "$text, during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                    text = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                    response = chat.sendMessage(text)
+                }
+
+                val bookingRoomFunction = functionCalls.find { it.name == "bookingRoom" }
+                if (bookingRoomFunction != null) {
+                    val hotel_id = bookingRoomFunction.args["hotel_id"].toString()
+                    val room_type_id = bookingRoomFunction.args["room_type_id"].toString()
+                    val checkin_date = bookingRoomFunction.args["checkin_date"].toString()
+                    val checkout_date = bookingRoomFunction.args["checkout_date"].toString()
+                    val total_price = bookingRoomFunction.args["total_price"].toString()
+                    val guest_name = bookingRoomFunction.args["guest_name"].toString()
+                    val guest_phone = bookingRoomFunction.args["guest_phone"].toString()
+                    val extra_order = bookingRoomFunction.args["extra_order"].toString()
+
+                    // 將 special_requirement 從 args 轉換為 List<String>
+                    val specialRequirement: List<String> = when (val requirement = bookingRoomFunction.args["special_requirement"]) {
+                        is JSONArray -> {
+                            (0 until requirement.length()).map { requirement.getString(it) }
+                        }
+                        is List<*> -> {
+                            requirement.filterIsInstance<String>()
+                        }
+                        else -> emptyList() // 若無法解析，則返回空列表
+                    }
+
+                    val note = bookingRoomFunction.args["note"].toString()
+
+                    val result = bookingRoom(hotel_id, room_type_id, checkin_date, checkout_date, total_price, guest_name, guest_phone, extra_order, specialRequirement, note)
+                    val booking_id = result.booking_id.toString()
+
+                    // 前對話+" booking successful " + 將回傳結果轉換為字串
+                    text = "Has booked a room successfully with booking ID $booking_id"
                     response = chat.sendMessage(text)
                 }
 
@@ -185,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                 model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = "gemini-2.5-flash",
                     systemInstruction = content(role = "system") { text(instructions) },
-                    tools = listOf(Tool.functionDeclarations(listOf(getExactDateDeclaration, getRoomTypesDeclaration)))
+                    tools = listOf(Tool.functionDeclarations(listOf(getExactDateDeclaration, getRoomTypesDeclaration, bookingRoomDeclaration)))
                 )
 
                 // 初始化聊天
@@ -424,6 +460,95 @@ class MainActivity : AppCompatActivity() {
                 Log.e("RoomTypes", "無法取得房型資訊", e)
                 mapOf("error" to e.message.toString())
             }
+        }
+    }
+
+    // booking Room fun
+    private val bookingRoomDeclaration = FunctionDeclaration(
+        "bookingRoom",
+        "Place a booking order by provide information to 'POST' to a booking API for booking a room in hotel.",
+        mapOf(
+            "hotel_id" to Schema.string("The hotel id for which you want to get the room types."),
+            "room_type_id" to Schema.string("The room type id for that specific hotel for which you want to book."),
+            "checkin_date" to Schema.string("The check-in date in YYYY-MM-DD format."),
+            "checkout_date" to Schema.string("The check-out date in YYYY-MM-DD format."),
+            "total_price" to Schema.string("The total price for the booking, calculated as price * days + extra_order."),
+            "guest_name" to Schema.string("The name of the guest who is booking the room."),
+            "guest_phone" to Schema.string("The phone number of the guest who is booking the room."),
+            "extra_order" to Schema.string("Any extra orders or services requested by the guest, such as breakfast."),
+            "special_requirement" to Schema.array(Schema.string("A special requirements or requests from the guest."),"A list of special requirements or requests from the guest."),
+            "note" to Schema.string("Any additional notes or comments regarding the booking."),
+            ),
+    )
+
+    data class BookingResponse(
+        val message: String,
+        val booking_id: String? = null,
+        val error: String? = null
+    )
+
+    private suspend fun bookingRoom(
+        hotel_id: String,
+        room_type_id: String,
+        checkin_date: String,
+        checkout_date: String,
+        total_price: String,
+        guest_name: String,
+        guest_phone: String,
+        extra_order: String,
+        special_requirement: List<String>,
+        note: String
+    ): BookingResponse {
+        val API_URL = "http://34.63.109.78/api/hotels/booking_room"
+        val client = OkHttpClient()
+
+        return try {
+            val json = JSONObject().apply {
+                put("hotel_id", hotel_id)
+                put("room_type_id", room_type_id)
+                put("checkin_date", checkin_date)
+                put("checkout_date", checkout_date)
+                put("total_price", total_price)
+                put("guest_name", guest_name)
+                put("guest_phone", guest_phone)
+                put("extra_order", extra_order)
+                put("special_requirement", special_requirement.joinToString(","))
+                put("note", note)
+            }
+
+            val mediaType = "application/json; charset=utf-8".toMediaType()
+            val requestBody = json.toString().toRequestBody(mediaType)
+
+            val request = Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).execute().use { response ->
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    val jsonResponse = JSONObject(responseBody ?: "{}")
+                    BookingResponse(
+                        message = jsonResponse.getString("message"),
+                        booking_id = jsonResponse.optString("booking_id", null)
+                    )
+                } else {
+                    BookingResponse(
+                        message = "訂房過程中發生錯誤。",
+                        error = response.message
+                    )
+                }
+            }
+        } catch (e: IOException) {
+            BookingResponse(
+                message = "訂房過程中發生錯誤。",
+                error = e.message ?: "未知的錯誤"
+            )
+        } catch (e: Exception) {
+            BookingResponse(
+                message = "訂房過程中發生錯誤。",
+                error = e.message ?: "未知的錯誤"
+            )
         }
     }
 }
