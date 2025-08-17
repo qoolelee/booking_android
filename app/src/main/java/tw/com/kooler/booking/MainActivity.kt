@@ -111,8 +111,19 @@ class MainActivity : AppCompatActivity() {
                         it.args["approximateDate"].toString()
                     }
                     val functionResponse = getExactDate(approximateDate ?: "")
-                    text = "$text is $functionResponse"
+                    text = "$text is $functionResponse."
                     response = chat.sendMessage(text)
+
+                    val getRoomTypesFunction = response.functionCalls.find { it.name == "getRoomTypes" }
+                    if (getRoomTypesFunction != null) {
+                        val id = getRoomTypesFunction.args["id"].toString()
+                        val checkinDate = getRoomTypesFunction.args["checkinDate"].toString()
+                        val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
+
+                        val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
+                        text = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                        response = chat.sendMessage(text)
+                    }
                 }
 
                 val getRoomTypesFunction = functionCalls.find { it.name == "getRoomTypes" }
