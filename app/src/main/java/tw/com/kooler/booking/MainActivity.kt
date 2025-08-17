@@ -21,6 +21,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import java.io.IOException
@@ -32,7 +33,8 @@ import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.Tool
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
+import org.json.JSONException
+import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -105,12 +107,10 @@ class MainActivity : AppCompatActivity() {
                 val functionCalls = response.functionCalls
                 val getExactDateFunction = functionCalls.find { it.name == "getExactDate" }
                 if (getExactDateFunction != null) {
-                    // 從 Map 中提取 approximateDate
-                    val functionResponse = getExactDateFunction?.let {
-                        val approximateDate = it.args["approximateDate"].toString()
-                        getExactDate(approximateDate)
+                    val approximateDate = getExactDateFunction?.let {
+                        it.args["approximateDate"].toString()
                     }
-
+                    val functionResponse = getExactDate(approximateDate ?: "")
                     text = "$text is $functionResponse"
                     response = chat.sendMessage(text)
                 }
@@ -122,8 +122,6 @@ class MainActivity : AppCompatActivity() {
                     val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
 
                     val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
-
-                    // 前對話+" has room types " + 將回傳結果轉換為字串
                     text = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
                     response = chat.sendMessage(text)
                 }
@@ -139,7 +137,6 @@ class MainActivity : AppCompatActivity() {
                     val guest_phone = bookingRoomFunction.args["guest_phone"].toString()
                     val extra_order = bookingRoomFunction.args["extra_order"].toString()
 
-                    // 將 special_requirement 從 args 轉換為 List<String>
                     val specialRequirement: List<String> = when (val requirement = bookingRoomFunction.args["special_requirement"]) {
                         is JSONArray -> {
                             (0 until requirement.length()).map { requirement.getString(it) }
@@ -147,16 +144,18 @@ class MainActivity : AppCompatActivity() {
                         is List<*> -> {
                             requirement.filterIsInstance<String>()
                         }
-                        else -> emptyList() // 若無法解析，則返回空列表
+                        else -> emptyList()
                     }
 
                     val note = bookingRoomFunction.args["note"].toString()
 
                     val result = bookingRoom(hotel_id, room_type_id, checkin_date, checkout_date, total_price, guest_name, guest_phone, extra_order, specialRequirement, note)
-                    val booking_id = result.booking_id.toString()
-
-                    // 前對話+" booking successful " + 將回傳結果轉換為字串
-                    text = "Has booked a room successfully with booking ID $booking_id"
+                    val booking_id = result.booking_id
+                    text = if (booking_id != null) {
+                        "已成功預訂房間，訂單編號為 $booking_id"
+                    } else {
+                        "訂房完成，但未返回訂單編號：${result.message}。錯誤：${result.error}"
+                    }
                     response = chat.sendMessage(text)
                 }
 
@@ -214,22 +213,18 @@ class MainActivity : AppCompatActivity() {
                       'Before starting the reservation, be sure to list all the information gathered from the user, and ask for confirmation.',
                       'Once the reservation is completed, politely inform the customer that the reservation is successful and provide them with the reservation details.',
                     ]
-
                 }"""
 
-                // 初始化 Gemini Developer API 後端服務
                 model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = "gemini-2.5-flash",
                     systemInstruction = content(role = "system") { text(instructions) },
                     tools = listOf(Tool.functionDeclarations(listOf(getExactDateDeclaration, getRoomTypesDeclaration, bookingRoomDeclaration)))
                 )
 
-                // 初始化聊天
                 val loc = getDeviceLocale()
                 chat = model.startChat(
                     history = listOf(
-                        content(role = "user") { text("I am a customer language $loc.") },
-                        //content(role = "model") { text("Great to meet you. What would you like to know?") }
+                        content(role = "user") { text("I am a customer language $loc.") }
                     )
                 )
 
@@ -310,40 +305,23 @@ class MainActivity : AppCompatActivity() {
 
     // --------- AI called functions -----------
 
-    // getExactDate
     private val getExactDateDeclaration = FunctionDeclaration(
         "getExactDate",
         "Converts approximate dates in a calculation, such as \"the day after tomorrow\", \"this weekend\", \"next Thursday\", etc., to precise dates, such as in the format: YYYY-MM-DD.",
         mapOf(
-            "approximateDate" to Schema.string("approximate dates in a calculation, such as \"the day after tomorrow\", \"this weekend\", \"next Thursday\", etc."
-            ),
+            "approximateDate" to Schema.string("approximate dates in a calculation, such as \"the day after tomorrow\", \"this weekend\", \"next Thursday\", etc.")
         )
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getExactDate(approximateDate: String): String {
-        /*
-        Converts approximate dates in a calculation, such as 'the day after tomorrow', 'this weekend', 'next Thursday', etc., to precise dates, such as 'December 3, 2025'.
-
-        Args:
-            approximateDate (str): An approximate date description.
-
-        Returns:
-            A date format string 'YYYY-MM-DD' if successful.
-
-            If an error occurs, it will return a string with an "error".
-        */
-
-        // 取得今天的日期，提供給模型作為計算基準
         val today: LocalDate = LocalDate.now()
-        val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE // Predefined format for YYYY-MM-DD
-        val todayStr: String = today.format(formatter) // Formats to YYYY-MM-DD
+        val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+        val todayStr: String = today.format(formatter)
 
         val model = Firebase.ai(backend = GenerativeBackend.googleAI())
             .generativeModel("gemini-2.5-flash")
 
-        // --- 設計給模型的提示 (Prompt) ---
-        // 這是最關鍵的部分。我們需要清楚地告訴模型它的任務和輸出要求。
         val prompt = """
             Your task is to convert a colloquial, vague date description into a precise Gregorian calendar date based on today's date.
 
@@ -385,14 +363,13 @@ class MainActivity : AppCompatActivity() {
         return response.text ?: "error: empty response"
     }
 
-    // getRoomTypes
-    val getRoomTypesDeclaration = FunctionDeclaration(
+    private val getRoomTypesDeclaration = FunctionDeclaration(
         "getRoomTypes",
-    "Input hotel id and check in date and check out date to get all the available room types/descriptions for that hotel during the specific time.",
+        "Input hotel id and check in date and check out date to get all the available room types/descriptions for that hotel during the specific time.",
         mapOf(
             "id" to Schema.string("The hotel id for which you want to get the room types."),
             "checkinDate" to Schema.string("The check in date in YYYY-MM-DD format for which you want to get the room types."),
-            "checkoutDate" to Schema.string("The check out date in YYYY-MM-DD format for which you want to get the room types."),
+            "checkoutDate" to Schema.string("The check out date in YYYY-MM-DD format for which you want to get the room types.")
         )
     )
 
@@ -401,28 +378,6 @@ class MainActivity : AppCompatActivity() {
         checkinDate: String,
         checkoutDate: String
     ): Any {
-        /*
-        Input hotel id and check in date and checkout date to get all the available room types/descriptions for that hotel.
-
-        Args:
-            id: The hotel id for which you want to get the room types.
-            checkinDate: The check-in date in YYYY-MM-DD format.
-            checkoutDate: The check-out date in YYYY-MM-DD format.
-
-        Returns:
-            A list of maps with room_type_id, type, price, information, available_count. For example:
-            [
-                {
-                    "room_type_id": "1",
-                    "type": "Deluxe King",
-                    "price": "400",
-                    "information": "A spacious room with a king-sized bed, perfect for couples or solo travelers.",
-                    "available_count": "5"
-                },
-                ...
-            ]
-            If an error occurs, it will return a map with an "error" key.
-        */
         return withContext(Dispatchers.IO) {
             try {
                 val url = "http://34.63.109.78/api/hotels/room_types?id=$id&checkin_date=$checkinDate&checkout_date=$checkoutDate"
@@ -463,24 +418,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // booking Room fun
     private val bookingRoomDeclaration = FunctionDeclaration(
         "bookingRoom",
         "Place a booking order by provide information to 'POST' to a booking API for booking a room in hotel.",
         mapOf(
-            "hotel_id" to Schema.string("The hotel id for which you want to get the room types."),
-            "room_type_id" to Schema.string("The room type id for that specific hotel for which you want to book."),
+            "hotel_id" to Schema.string("The hotel id for which you want to book."),
+            "room_type_id" to Schema.string("The room type id for the room you want to book."),
             "checkin_date" to Schema.string("The check-in date in YYYY-MM-DD format."),
             "checkout_date" to Schema.string("The check-out date in YYYY-MM-DD format."),
             "total_price" to Schema.string("The total price for the booking, calculated as price * days + extra_order."),
             "guest_name" to Schema.string("The name of the guest who is booking the room."),
             "guest_phone" to Schema.string("The phone number of the guest who is booking the room."),
             "extra_order" to Schema.string("Any extra orders or services requested by the guest, such as breakfast."),
-            "special_requirement" to Schema.array(Schema.string("A special requirements or requests from the guest."),"A list of special requirements or requests from the guest."),
-            "note" to Schema.string("Any additional notes or comments regarding the booking."),
-            ),
+            "special_requirement" to Schema.array(Schema.string("A special requirements or requests from the guest."), "A list of special requirements or requests from the guest."),
+            "note" to Schema.string("Any additional notes or comments regarding the booking.")
+        )
     )
 
+    // Booking 回應資料類別
     data class BookingResponse(
         val message: String,
         val booking_id: String? = null,
@@ -498,23 +453,86 @@ class MainActivity : AppCompatActivity() {
         extra_order: String,
         special_requirement: List<String>,
         note: String
-    ): BookingResponse {
+    ): BookingResponse = withContext(Dispatchers.IO) {
         val API_URL = "http://34.63.109.78/api/hotels/booking_room"
         val client = OkHttpClient()
 
-        return try {
-            val json = JSONObject().apply {
-                put("hotel_id", hotel_id)
-                put("room_type_id", room_type_id)
-                put("checkin_date", checkin_date)
-                put("checkout_date", checkout_date)
-                put("total_price", total_price)
-                put("guest_name", guest_name)
-                put("guest_phone", guest_phone)
-                put("extra_order", extra_order)
-                put("special_requirement", special_requirement.joinToString(","))
-                put("note", note)
+        // 通用：去掉首尾空白 & 引號
+        fun normalize(input: String): String {
+            return input.trim().trim('"')
+        }
+
+        try {
+            // ---- 清理輸入 ----
+            val cleanHotelId = normalize(hotel_id)
+            val cleanRoomTypeId = normalize(room_type_id)
+            val cleanCheckinDate = normalize(checkin_date)
+            val cleanCheckoutDate = normalize(checkout_date)
+            val cleanTotalprice = normalize(total_price)
+            val cleanGuestName = normalize(guest_name)
+            val cleanGuestPhone = normalize(guest_phone)
+            val cleanExtraOrder = normalize(extra_order)
+            val cleanSpecialRequirement = normalize(special_requirement.toString())
+            val cleanNote = normalize(note)
+
+            // ---- 驗證日期格式 ----
+            val dateFormat = Regex("""^\d{4}-\d{2}-\d{2}$""")
+            if (!cleanCheckinDate.matches(dateFormat) || !cleanCheckoutDate.matches(dateFormat)) {
+                return@withContext BookingResponse(
+                    message = "Invalid date format. Please use YYYY-MM-DD.",
+                    error = "Date format error: checkin_date='$cleanCheckinDate', checkout_date='$cleanCheckoutDate'"
+                )
             }
+
+            // ---- 驗證日期邏輯 ----
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            sdf.isLenient = false
+            try {
+                val checkin = sdf.parse(cleanCheckinDate)
+                val checkout = sdf.parse(cleanCheckoutDate)
+                val today = Calendar.getInstance().time
+
+                if (checkin != null && checkin.before(today) && !sdf.format(checkin).equals(sdf.format(today))) {
+                    return@withContext BookingResponse(
+                        message = "Check-in date cannot be in the past.",
+                        error = "Invalid check-in date"
+                    )
+                }
+                if (checkout != null && checkout <= checkin) {
+                    return@withContext BookingResponse(
+                        message = "Check-out date must be after the check-in date.",
+                        error = "Invalid checkout date"
+                    )
+                }
+            } catch (e: ParseException) {
+                return@withContext BookingResponse(
+                    message = "Invalid date format. Please use YYYY-MM-DD.",
+                    error = "Date parse error: ${e.message}"
+                )
+            }
+
+            // ---- 驗證必要欄位 ----
+            if (cleanHotelId.isBlank() || cleanRoomTypeId.isBlank() || guest_name.isBlank() || guest_phone.isBlank()) {
+                return@withContext BookingResponse(
+                    message = "Missing required fields.",
+                    error = "Required fields cannot be empty"
+                )
+            }
+
+            // ---- 構造 JSON ----
+            val json = JSONObject().apply {
+                put("hotel_id", cleanHotelId)
+                put("room_type_id", cleanRoomTypeId)
+                put("checkin_date", cleanCheckinDate)
+                put("checkout_date", cleanCheckoutDate)
+                put("total_price", cleanTotalprice)
+                put("guest_name", cleanGuestName)
+                put("guest_phone", cleanGuestPhone)
+                put("extra_order", cleanExtraOrder)
+                put("special_requirement", JSONArray(cleanSpecialRequirement))
+                put("note", cleanNote)
+            }
+            Log.d("BookingAPI", "發送請求: URL=$API_URL, JSON=$json")
 
             val mediaType = "application/json; charset=utf-8".toMediaType()
             val requestBody = json.toString().toRequestBody(mediaType)
@@ -524,26 +542,36 @@ class MainActivity : AppCompatActivity() {
                 .post(requestBody)
                 .build()
 
+            // ---- 發送請求 ----
             client.newCall(request).execute().use { response ->
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    val jsonResponse = JSONObject(responseBody ?: "{}")
-                    BookingResponse(
-                        message = jsonResponse.getString("message"),
-                        booking_id = jsonResponse.optString("booking_id", null)
-                    )
-                } else {
-                    BookingResponse(
-                        message = "訂房過程中發生錯誤。",
-                        error = response.message
-                    )
+                val responseBody = response.body?.string()
+                Log.d("BookingAPI", "原始回應: $responseBody, 狀態碼: ${response.code}")
+
+                when (response.code) {
+                    201 -> {
+                        val jsonResponse = JSONObject(responseBody ?: "{}")
+                        val bookingId = jsonResponse.optString("booking_id", null)
+                        BookingResponse(
+                            message = jsonResponse.optString("message", "訂房完成"),
+                            booking_id = bookingId,
+                            error = if (bookingId == null) "回應中缺少 booking_id 或為 null" else null
+                        )
+                    }
+                    400, 409, 500 -> {
+                        val jsonResponse = JSONObject(responseBody ?: "{}")
+                        BookingResponse(
+                            message = jsonResponse.optString("message", "訂房失敗"),
+                            error = jsonResponse.optString("error", response.message)
+                        )
+                    }
+                    else -> {
+                        BookingResponse(
+                            message = "訂房過程中發生錯誤。",
+                            error = "未知的狀態碼: ${response.code}"
+                        )
+                    }
                 }
             }
-        } catch (e: IOException) {
-            BookingResponse(
-                message = "訂房過程中發生錯誤。",
-                error = e.message ?: "未知的錯誤"
-            )
         } catch (e: Exception) {
             BookingResponse(
                 message = "訂房過程中發生錯誤。",
@@ -551,4 +579,5 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
 }
