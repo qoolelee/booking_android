@@ -24,7 +24,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
-import java.io.IOException
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.room.Room
@@ -34,6 +33,7 @@ import com.google.firebase.ai.type.Tool
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
+import java.io.IOException
 import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -93,14 +93,22 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessage(editText: EditText) {
-        var text = editText.text.toString()
+        val text = editText.text.toString()
         if (text.isNotEmpty()) {
             // 本地訊息
             addMessage(text, true)
             editText.text.clear()
 
-            // 送出至 chat
+            // 加入左側 Loading 訊息
+            val loadingMessage = Message("", false, getTime(), isLoading = true)
             lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    messageList.add(loadingMessage)
+                    adapter.notifyItemInserted(messageList.size - 1)
+                    recyclerView.scrollToPosition(messageList.size - 1)
+                }
+
+                // 送出至 chat
                 var response = chat.sendMessage(text)
 
                 // 處理 functionCalls
@@ -111,8 +119,8 @@ class MainActivity : AppCompatActivity() {
                         it.args["approximateDate"].toString()
                     }
                     val functionResponse = getExactDate(approximateDate ?: "")
-                    text = "$text is $functionResponse."
-                    response = chat.sendMessage(text)
+                    val newText = "$text is $functionResponse."
+                    response = chat.sendMessage(newText)
 
                     val getRoomTypesFunction = response.functionCalls.find { it.name == "getRoomTypes" }
                     if (getRoomTypesFunction != null) {
@@ -121,8 +129,8 @@ class MainActivity : AppCompatActivity() {
                         val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
 
                         val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
-                        text = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
-                        response = chat.sendMessage(text)
+                        val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                        response = chat.sendMessage(roomText)
                     }
                 }
 
@@ -133,8 +141,8 @@ class MainActivity : AppCompatActivity() {
                     val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
 
                     val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
-                    text = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
-                    response = chat.sendMessage(text)
+                    val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                    response = chat.sendMessage(roomText)
                 }
 
                 val bookingRoomFunction = functionCalls.find { it.name == "bookingRoom" }
@@ -162,15 +170,23 @@ class MainActivity : AppCompatActivity() {
 
                     val result = bookingRoom(hotel_id, room_type_id, checkin_date, checkout_date, total_price, guest_name, guest_phone, extra_order, specialRequirement, note)
                     val booking_id = result.booking_id
-                    text = if (booking_id != null) {
+                    val bookingText = if (booking_id != null) {
                         "已成功預訂房間，訂單編號為 $booking_id"
                     } else {
                         "訂房完成，但未返回訂單編號：${result.message}。錯誤：${result.error}"
                     }
-                    response = chat.sendMessage(text)
+                    response = chat.sendMessage(bookingText)
                 }
 
-                addMessage(response.text, false)
+                // 移除 loading 訊息並添加回應
+                withContext(Dispatchers.Main) {
+                    val lastIndex = messageList.indexOfLast { it.isLoading }
+                    if (lastIndex != -1) {
+                        messageList.removeAt(lastIndex)
+                        adapter.notifyItemRemoved(lastIndex)
+                    }
+                    addMessage(response.text, false)
+                }
             }
         }
     }
@@ -189,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         withContext(Dispatchers.Main) {
             adapter.notifyDataSetChanged()
             if (messageList.isNotEmpty()) {
-                recyclerView.smoothScrollToPosition(messageList.size - 1)
+                recyclerView.scrollToPosition(messageList.size - 1)
             }
         }
     }
@@ -282,7 +298,7 @@ class MainActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     messageList.add(Message("錯誤：無法取得飯店資訊，請稍後再試。", false, getTime()))
                     adapter.notifyItemInserted(messageList.size - 1)
-                    recyclerView.smoothScrollToPosition(messageList.size - 1)
+                    recyclerView.scrollToPosition(messageList.size - 1)
                 }
                 emptyList()
             }
@@ -291,20 +307,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun addMessage(str: String?, isUser: Boolean) {
         val message = Message(str.toString(), isUser, getTime())
-        messageList.add(message)
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
-                db.messageDao().insertMessage(
-                    MessageEntity(
-                        text = message.text,
-                        isUser = message.isUser,
-                        time = message.time
-                    )
-                )
-            }
             withContext(Dispatchers.Main) {
+                messageList.add(message)
                 adapter.notifyItemInserted(messageList.size - 1)
-                recyclerView.smoothScrollToPosition(messageList.size - 1)
+                recyclerView.scrollToPosition(messageList.size - 1)
             }
         }
     }
@@ -490,8 +497,8 @@ class MainActivity : AppCompatActivity() {
             val dateFormat = Regex("""^\d{4}-\d{2}-\d{2}$""")
             if (!cleanCheckinDate.matches(dateFormat) || !cleanCheckoutDate.matches(dateFormat)) {
                 return@withContext BookingResponse(
-                    message = "Invalid date format. Please use YYYY-MM-DD.",
-                    error = "Date format error: checkin_date='$cleanCheckinDate', checkout_date='$cleanCheckoutDate'"
+                    message = "無效的日期格式，請使用 YYYY-MM-DD。",
+                    error = "日期格式錯誤：checkin_date='$cleanCheckinDate', checkout_date='$cleanCheckoutDate'"
                 )
             }
 
@@ -505,28 +512,28 @@ class MainActivity : AppCompatActivity() {
 
                 if (checkin != null && checkin.before(today) && !sdf.format(checkin).equals(sdf.format(today))) {
                     return@withContext BookingResponse(
-                        message = "Check-in date cannot be in the past.",
-                        error = "Invalid check-in date"
+                        message = "入住日期不能是過去的日期。",
+                        error = "無效的入住日期"
                     )
                 }
                 if (checkout != null && checkout <= checkin) {
                     return@withContext BookingResponse(
-                        message = "Check-out date must be after the check-in date.",
-                        error = "Invalid checkout date"
+                        message = "退房日期必須晚於入住日期。",
+                        error = "無效的退房日期"
                     )
                 }
             } catch (e: ParseException) {
                 return@withContext BookingResponse(
-                    message = "Invalid date format. Please use YYYY-MM-DD.",
-                    error = "Date parse error: ${e.message}"
+                    message = "無效的日期格式，請使用 YYYY-MM-DD。",
+                    error = "日期解析錯誤：${e.message}"
                 )
             }
 
             // ---- 驗證必要欄位 ----
             if (cleanHotelId.isBlank() || cleanRoomTypeId.isBlank() || guest_name.isBlank() || guest_phone.isBlank()) {
                 return@withContext BookingResponse(
-                    message = "Missing required fields.",
-                    error = "Required fields cannot be empty"
+                    message = "缺少必要欄位。",
+                    error = "必要欄位不可為空"
                 )
             }
 
