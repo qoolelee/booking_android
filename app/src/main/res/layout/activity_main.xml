@@ -53,16 +53,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp" />
 
-        <ImageButton
-            android:id="@+id/buttonMic"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@null"
-            android:src="@android:drawable/ic_btn_speak_now"
-            android:scaleType="centerInside"
-            android:contentDescription="Record voice"
-            app:tint="#666666"
-            android:layout_marginEnd="8dp" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/buttonMic"-->
+<!--            android:layout_width="48dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:background="@null"-->
+<!--            android:src="@android:drawable/ic_btn_speak_now"-->
+<!--            android:scaleType="centerInside"-->
+<!--            android:contentDescription="Record voice"-->
+<!--            app:tint="#666666"-->
+<!--            android:layout_marginEnd="8dp" />-->
 
         <ImageButton
             android:id="@+id/buttonSend"
