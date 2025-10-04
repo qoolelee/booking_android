@@ -141,7 +141,12 @@ class MainActivity : AppCompatActivity() {
                     val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
 
                     val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
-                    val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+
+                    // 依照roomTypes資料製作各房型card view, 並顯示在RecyclerView中
+                    showRoomCards(roomTypes)
+
+                    //val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+                    val roomText = "during the check in and check out date, the available room types list information has already been provided to user, ask the user to make selections by click the button along with each room type picture."
                     response = chat.sendMessage(roomText)
                 }
 
@@ -208,6 +213,10 @@ class MainActivity : AppCompatActivity() {
                 recyclerView.scrollToPosition(messageList.size - 1)
             }
         }
+    }
+
+    private fun showRoomCards(roomTypes: String) {
+
     }
 
     private fun initAI() {
@@ -418,7 +427,8 @@ class MainActivity : AppCompatActivity() {
                                     "type" to jsonObject.getString("type"),
                                     "price" to jsonObject.getString("price"),
                                     "information" to jsonObject.getString("information"),
-                                    "available_count" to jsonObject.getString("available_count")
+                                    "available_count" to jsonObject.getString("available_count"),
+                                    "pictures" to jsonObject.getString("pictures")
                                 )
                             )
                         }
