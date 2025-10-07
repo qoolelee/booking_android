@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.view.KeyEvent
 import androidx.annotation.RequiresApi
-import androidx.room.Room
 import com.google.firebase.ai.type.FunctionDeclaration
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.Tool
@@ -46,19 +45,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var model: GenerativeModel
     private val client = OkHttpClient()
     private lateinit var chat: Chat
-    private lateinit var db: AppDatabase
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // 初始化 Room 資料庫
-        db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
 
         recyclerView = findViewById(R.id.recyclerView)
         val editText = findViewById<EditText>(R.id.editTextMessage)
@@ -70,8 +61,6 @@ class MainActivity : AppCompatActivity() {
 
         // 載入儲存的訊息
         lifecycleScope.launch {
-            // loadMessagesFromRoom()
-            // 在載入訊息後初始化 AI
             initAI()
         }
 
@@ -145,8 +134,12 @@ class MainActivity : AppCompatActivity() {
                     // 依照roomTypes資料製作各房型card view, 並顯示在RecyclerView中
                     showRoomCards(roomTypes)
 
-                    //val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
-                    val roomText = "during the check in and check out date, the available room types list information has already been provided to user, ask the user to make selections by click the button along with each room type picture."
+                    val roomText = """
+                        the available room types list information has already been provided to user with picture and detailed room information by others, 
+                        you don't have to repeat providing the information to user again, just ask user to select room type by clicking button bellow each room type picture,
+                        for your reference only, during the check in and check out date, there are room types $roomTypes available.
+                    """
+
                     response = chat.sendMessage(roomText)
                 }
 
@@ -201,23 +194,41 @@ class MainActivity : AppCompatActivity() {
         return sdf.format(Date())
     }
 
-    private suspend fun loadMessagesFromRoom() {
-        val messages = withContext(Dispatchers.IO) {
-            db.messageDao().getAllMessages()
-        }
-        messageList.clear()
-        messageList.addAll(messages.map { Message(it.text, it.isUser, it.time) })
-        withContext(Dispatchers.Main) {
-            adapter.notifyDataSetChanged()
-            if (messageList.isNotEmpty()) {
-                recyclerView.scrollToPosition(messageList.size - 1)
-            }
-        }
-    }
-
     private fun showRoomCards(roomTypes: String) {
+        try {
+            val jsonArray = JSONArray(roomTypes)
+            for (i in 0 until jsonArray.length()) {
+                val obj = jsonArray.getJSONObject(i)
 
+                val picturesArray = obj.optJSONArray("pictures")
+                val firstImage = if (picturesArray != null && picturesArray.length() > 0)
+                    picturesArray.getString(0)
+                else
+                    null
+
+                val type = obj.optString("type")
+                val price = obj.optString("price")
+                val text = "$type\n價格：$price"
+
+                val message = Message(
+                    text = text,
+                    isUser = false,
+                    time = getTime(),
+                    imageUrl = firstImage
+                )
+
+                runOnUiThread {
+                    messageList.add(message)
+                    adapter.notifyItemInserted(messageList.size - 1)
+                    recyclerView.scrollToPosition(messageList.size - 1)
+                }
+            }
+        } catch (e: JSONException) {
+            Log.e("showRoomCards", "JSON parse error: ${e.message}")
+        }
     }
+
+
 
     private fun initAI() {
         val hotelName = "Grand Hyatt Taipei"
@@ -264,7 +275,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
 
-                val response = chat.sendMessage("@string/hello")
+                val response = chat.sendMessage("@string/hello_please_introduce_yourself")
                 addMessage(response.text, false)
 
             } catch (e: IOException) {
@@ -415,33 +426,37 @@ class MainActivity : AppCompatActivity() {
 
                 client.newCall(request).execute().use { response ->
                     if (response.isSuccessful) {
-                        val jsonString = response.body?.string() ?: return@withContext emptyMap<String, Any>()
+                        val jsonString = response.body?.string() ?: return@withContext emptyList<Map<String, Any>>()
                         val jsonArray = JSONArray(jsonString)
-                        val roomTypes = mutableListOf<Map<String, Any>>()
+                        val roomTypes = mutableListOf<JSONObject>()
 
                         for (i in 0 until jsonArray.length()) {
                             val jsonObject = jsonArray.getJSONObject(i)
-                            roomTypes.add(
-                                mapOf(
-                                    "room_type_id" to jsonObject.getString("room_type_id"),
-                                    "type" to jsonObject.getString("type"),
-                                    "price" to jsonObject.getString("price"),
-                                    "information" to jsonObject.getString("information"),
-                                    "available_count" to jsonObject.getString("available_count"),
-                                    "pictures" to jsonObject.getString("pictures")
-                                )
-                            )
+
+                            // ✅ 直接保留原本的 JSONArray，而不是字串
+                            val picturesArray = jsonObject.optJSONArray("pictures") ?: JSONArray()
+
+                            val cleanObject = JSONObject().apply {
+                                put("room_type_id", jsonObject.optString("room_type_id"))
+                                put("type", jsonObject.optString("type"))
+                                put("price", jsonObject.optString("price"))
+                                put("information", jsonObject.optString("information"))
+                                put("available_count", jsonObject.optString("available_count"))
+                                put("pictures", picturesArray) // ✅ 這裡保持 JSONArray
+                            }
+                            roomTypes.add(cleanObject)
                         }
-                        roomTypes
+
+                        return@withContext JSONArray(roomTypes).toString()
                     } else if (response.code in listOf(400, 404)) {
-                        emptyList<Map<String, Any>>()
+                        return@withContext "[]"
                     } else {
                         throw IOException("Unexpected code ${response.code}: ${response.message}")
                     }
                 }
             } catch (e: Exception) {
                 Log.e("RoomTypes", "無法取得房型資訊", e)
-                mapOf("error" to e.message.toString())
+                return@withContext "[{\"error\":\"${e.message}\"}]"
             }
         }
     }

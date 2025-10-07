@@ -4,5 +4,6 @@ data class Message(
     val text: String,
     val isUser: Boolean,
     val time: String,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val imageUrl: String? = null
 )

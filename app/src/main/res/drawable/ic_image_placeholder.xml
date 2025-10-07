@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/ic_image_placeholder.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M19,3H5c-1.1,0 -2,0.9 -2,2v14a2,2 0,0,0,2,2h14a2,2 0,0,0,2,-2V5a2,2 0,0,0,-2,-2zM19,19H5V5h14v14zM8.9,13.98l2.1,2.52 3,-3.76 4,5.26H6l2.9,-4.02z"/>
+</vector>
