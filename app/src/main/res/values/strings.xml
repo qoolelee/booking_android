@@ -3,4 +3,5 @@
     <string name="input_message">輸入訊息</string>
     <string name="hello_please_introduce_yourself">你好,請介紹自己</string>
     <string name="room_type_picture">房型圖片</string>
+    <string name="book_now">BOOKING NOW</string>
 </resources>

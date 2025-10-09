@@ -41,47 +41,10 @@
         android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintWidth_max="wrap"
         app:layout_constraintWidth_percent="0.8"
         app:layout_constraintStart_toEndOf="@id/imageAvatarLeft"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/imageAvatarLeft" />
-
-    <LinearLayout
-        android:id="@+id/imageRoomContainer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_message_left"
-        android:visibility="gone"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintWidth_max="wrap"
-        app:layout_constraintStart_toEndOf="@id/imageAvatarLeft"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageAvatarLeft">
-
-        <ImageView
-            android:id="@+id/imageRoomLeft"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/imageRoomInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            android:visibility="gone"
-            android:text="This is pcture" />
-
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/textTimeLeft"

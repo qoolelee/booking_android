@@ -194,40 +194,57 @@ class MainActivity : AppCompatActivity() {
         return sdf.format(Date())
     }
 
-    private fun showRoomCards(roomTypes: String) {
+    fun showRoomCards(roomTypes: String) {
         try {
             val jsonArray = JSONArray(roomTypes)
             for (i in 0 until jsonArray.length()) {
                 val obj = jsonArray.getJSONObject(i)
+                val infoStr = obj.getString("information").trim()
 
-                val picturesArray = obj.optJSONArray("pictures")
-                val firstImage = if (picturesArray != null && picturesArray.length() > 0)
-                    picturesArray.getString(0)
-                else
-                    null
+                // 根據格式判斷解析方式
+                val info: JSONObject = when {
+                    infoStr.startsWith("[") -> {
+                        val arr = JSONArray(infoStr)
+                        arr.getJSONObject(0) // 取第一個元素
+                    }
+                    infoStr.startsWith("{") -> {
+                        JSONObject(infoStr)
+                    }
+                    else -> {
+                        JSONObject() // 預防空值
+                    }
+                }
 
-                val type = obj.optString("type")
-                val price = obj.optString("price")
-                val text = "$type\n價格：$price"
+                // 取得 features
+                val features = info.optJSONObject("features") ?: JSONObject()
 
-                val message = Message(
-                    text = text,
-                    isUser = false,
-                    time = getTime(),
-                    imageUrl = firstImage
+                val roomInfo = RoomInfo(
+                    type = obj.getString("type"),
+                    price = obj.getString("price"),
+                    features = "${features.optString("size")}・${features.optString("view")}・${features.optString("wifi")}・${features.optString("sleeps")}",
+                    pictures = obj.getJSONArray("pictures").let { arr ->
+                        List(arr.length()) { arr.getString(it) }
+                    }
                 )
 
-                runOnUiThread {
-                    messageList.add(message)
-                    adapter.notifyItemInserted(messageList.size - 1)
-                    recyclerView.scrollToPosition(messageList.size - 1)
-                }
+                val message = Message(
+                    text = "",
+                    isUser = false,
+                    time = getTime(),
+                    isRoomCard = true,
+                    roomInfo = roomInfo
+                )
+
+                messageList.add(message)
             }
-        } catch (e: JSONException) {
-            Log.e("showRoomCards", "JSON parse error: ${e.message}")
+
+            adapter.notifyDataSetChanged()
+            recyclerView.scrollToPosition(messageList.size - 1)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
-
 
 
     private fun initAI() {
