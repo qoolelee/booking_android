@@ -1,0 +1,79 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RoomDetailActivity">
+
+    <!-- ✅ 左上角返回箭頭按鈕 -->
+    <ImageButton
+        android:id="@+id/buttonBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Back"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:tint="#333333" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="16dp">
+
+        <!-- 房型名稱 -->
+        <TextView
+            android:id="@+id/textRoomTypeDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Room Type"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 可滑動圖片區 -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerRoomImages"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:id="@+id/layoutIndicators"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <!-- 價格 -->
+        <TextView
+            android:id="@+id/textPriceDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NT$9,000"
+            android:textColor="#FF5722"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- 房型特色 -->
+        <TextView
+            android:id="@+id/textFeaturesDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="40㎡・City view・Free WiFi・Sleeps 3"
+            android:layout_marginTop="8dp"
+            android:textColor="#555555" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+

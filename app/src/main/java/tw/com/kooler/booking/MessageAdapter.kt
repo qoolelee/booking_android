@@ -1,5 +1,6 @@
 package tw.com.kooler.booking
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,6 +71,16 @@ class MessageAdapter(private val messages: MutableList<Message>) :
                 .load(room.pictures.firstOrNull())
                 .placeholder(R.drawable.ic_image_placeholder)
                 .into(holder.imageRoom)
+            holder.imageRoom.setOnClickListener {
+                val context = holder.itemView.context
+                val intent = Intent(context, RoomDetailActivity::class.java)
+                intent.putExtra("type", room.type)
+                intent.putExtra("price", room.price)
+                intent.putExtra("features", room.features)
+                intent.putStringArrayListExtra("pictures", ArrayList(room.pictures))
+                context.startActivity(intent)
+            }
+
             holder.buttonBook.setOnClickListener {
                 // TODO: 呼叫訂房邏輯
             }
