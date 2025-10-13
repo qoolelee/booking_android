@@ -25,6 +25,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
 import android.view.KeyEvent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.firebase.ai.type.FunctionDeclaration
 import com.google.firebase.ai.type.Schema
@@ -46,6 +47,18 @@ class MainActivity : AppCompatActivity() {
     private val client = OkHttpClient()
     private lateinit var chat: Chat
 
+    val roomDetailLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedRoom = result.data?.getStringExtra("selected_room_type")
+            if (!selectedRoom.isNullOrEmpty()) {
+                roomSelected(selectedRoom) // ✅ 呼叫訂房邏輯
+            }
+        }
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +68,9 @@ class MainActivity : AppCompatActivity() {
         val editText = findViewById<EditText>(R.id.editTextMessage)
         val buttonSend = findViewById<ImageButton>(R.id.buttonSend)
 
-        adapter = MessageAdapter(messageList)
+        adapter = MessageAdapter(messageList) { roomType ->
+            roomSelected(roomType)
+        }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -637,6 +652,20 @@ class MainActivity : AppCompatActivity() {
                 message = "訂房過程中發生錯誤。",
                 error = e.message ?: "未知的錯誤"
             )
+        }
+    }
+
+    private fun roomSelected(roomType: String) {
+        lifecycleScope.launch {
+//            withContext(Dispatchers.Main) {
+//                addMessage("您選擇的房型是：$roomType", true)
+//            }
+
+            // TODO: 若想自動進入 AI 訂房流程，可直接送出指令給 chat
+            val response = chat.sendMessage("User selected room type: $roomType.")
+            withContext(Dispatchers.Main) {
+                addMessage(response.text, false)
+            }
         }
     }
 

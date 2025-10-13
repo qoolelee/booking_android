@@ -25,7 +25,7 @@ class RoomImageAdapter(private val images: List<String>) :
         Glide.with(holder.itemView.context)
             .load(url)
             .placeholder(R.drawable.ic_image_placeholder)
-            .centerCrop()
+            .fitCenter()
             .into(holder.image)
     }
 

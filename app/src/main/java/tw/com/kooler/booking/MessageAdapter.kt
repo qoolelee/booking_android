@@ -12,7 +12,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class MessageAdapter(private val messages: MutableList<Message>) :
+class MessageAdapter(private val messages: MutableList<Message>,
+                     private val onRoomSelected: (String) -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -73,16 +75,19 @@ class MessageAdapter(private val messages: MutableList<Message>) :
                 .into(holder.imageRoom)
             holder.imageRoom.setOnClickListener {
                 val context = holder.itemView.context
-                val intent = Intent(context, RoomDetailActivity::class.java)
-                intent.putExtra("type", room.type)
-                intent.putExtra("price", room.price)
-                intent.putExtra("features", room.features)
-                intent.putStringArrayListExtra("pictures", ArrayList(room.pictures))
-                context.startActivity(intent)
+                if (context is MainActivity) {
+                    val intent = Intent(context, RoomDetailActivity::class.java)
+                    intent.putExtra("type", room.type)
+                    intent.putExtra("price", room.price)
+                    intent.putExtra("features", room.features)
+                    intent.putStringArrayListExtra("pictures", ArrayList(room.pictures))
+                    context.roomDetailLauncher.launch(intent) // ✅ 使用 MainActivity 的 launcher
+                }
             }
 
+
             holder.buttonBook.setOnClickListener {
-                // TODO: 呼叫訂房邏輯
+                onRoomSelected(room.type)
             }
         }
     }

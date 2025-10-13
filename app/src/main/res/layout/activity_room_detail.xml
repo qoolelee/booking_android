@@ -42,7 +42,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerRoomImages"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp" />
 
         <LinearLayout
@@ -72,7 +72,17 @@
             android:layout_height="wrap_content"
             android:text="40㎡・City view・Free WiFi・Sleeps 3"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:textColor="#555555" />
+
+        <Button
+            android:id="@+id/detailButtonBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/book_now"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2196F3"
+            android:layout_gravity="end" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

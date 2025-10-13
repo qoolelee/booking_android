@@ -1,14 +1,14 @@
 package tw.com.kooler.booking
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 
 class RoomDetailActivity : AppCompatActivity() {
     private lateinit var indicatorsLayout: LinearLayout
@@ -51,6 +51,15 @@ class RoomDetailActivity : AppCompatActivity() {
                 setCurrentIndicator(position)
             }
         })
+
+        val buttonBook = findViewById<Button>(R.id.detailButtonBook)
+        buttonBook.setOnClickListener {
+            val resultIntent = Intent()
+            resultIntent.putExtra("selected_room_type", type)
+            setResult(RESULT_OK, resultIntent)
+            finish() // ✅ 關閉當前 Activity
+        }
+
     }
 
     // 建立指示點

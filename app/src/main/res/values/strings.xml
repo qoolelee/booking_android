@@ -4,4 +4,7 @@
     <string name="hello_please_introduce_yourself">你好,請介紹自己</string>
     <string name="room_type_picture">房型圖片</string>
     <string name="book_now">BOOKING NOW</string>
+    <string name="calendar_button">booking result page</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">Send string</string>
 </resources>
