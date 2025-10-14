@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Sistema de reservas</string>
+    <string name="input_message">Escriba su mensaje aquí</string>
+    <string name="hello_please_introduce_yourself">¡Hola! Soy Janet, tu asistente de reservas de hotel.</string>
+    <string name="room_type_picture">Fotos de las habitaciones</string>
+    <string name="book_now">RESERVAR AHORA</string>
+    <string name="calendar_button">Ver reservas</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">Enviar mensaje</string>
+    <string name="info_icon">Icono de información</string>
+    <string name="info_text">Toque la imagen para ver más detalles.</string>
+    <string name="booking_records">Historial de reservas</string>
+    <string name="label_booking_id">ID de reserva:#%1$d</string>
+    <string name="label_guest_name">Nombre del huésped:%1$s</string>
+    <string name="label_guest_phone">Teléfono:%1$s</string>
+    <string name="label_check_in">Fecha de entrada:%1$s</string>
+    <string name="label_check_out">Fecha de salida:%1$s</string>
+    <string name="label_room_id">N.º de habitación:%1$d</string>
+    <string name="label_extra_order">Pedido adicional:%1$s</string>
+    <string name="label_total_price">Precio total:%1$s</string>
+    <string name="label_special">Requisitos especiales:%1$s</string>
+    <string name="label_note">Nota:%1$s</string>
+    <string name="label_none">Ninguno</string>
+    <string name="info_text_right">Deslice hacia la derecha para ver más fotos.</string>
+    <string name="restart_chat_title">Reiniciar chat</string>
+    <string name="are_you_sure_restart_chat">¿Seguro que desea borrar todos los mensajes y reiniciar la reserva?</string>
+    <string name="lower_left_and_upper_right">Nota del sistema: ¡Reserva exitosa! Toque el icono del calendario arriba a la derecha para ver sus reservas o el icono de abajo a la izquierda para comenzar una nueva.</string>
+    <string name="start_system_message">Booking AI prueba alfa del sistema (multilingüe v0.1), todos los derechos reservados (Kooler Media ®).\n\nLa aplicación puede adaptarse para reservas de dentistas, restaurantes, alquiler de coches… para iOS, Android, Web, Line, WhatsApp.\n\nContáctenos tocando el icono de correo en la esquina superior izquierda.\n\nGracias por su prueba.</string>
+    <string name="mail_button">Botón de correo</string>
+    <string name="mail_subject">Consulta Booking.AI</string>
+    <string name="choose_email_client">Elija una aplicación de correo</string>
+</resources>

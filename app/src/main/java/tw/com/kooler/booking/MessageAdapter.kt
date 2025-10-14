@@ -33,7 +33,7 @@ class MessageAdapter(private val messages: MutableList<Message>,
         val message = messages[position]
 
         if (holder is MessageViewHolder) {
-            if (message.isUser) {
+            if (message.isUser == 1) {
                 // 顯示右側
                 holder.textRight.visibility = View.VISIBLE
                 holder.timeRight.visibility = View.VISIBLE
@@ -48,6 +48,11 @@ class MessageAdapter(private val messages: MutableList<Message>,
             } else {
                 // 顯示左側
                 holder.imageLeft.visibility = View.VISIBLE // icon
+                if (message.isUser == 2) {
+                    holder.imageLeft.setImageResource(R.drawable.ic_booking_256)
+                } else {
+                    holder.imageLeft.setImageResource(R.drawable.ic_custom_service_girl)
+                }
                 holder.textRight.visibility = View.GONE
                 holder.timeRight.visibility = View.GONE
 

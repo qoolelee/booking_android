@@ -7,7 +7,7 @@
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -19,7 +19,31 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_image_placeholder" />
+            android:src="@drawable/ic_image_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/infoIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_info_24"
+            android:contentDescription="@string/info_icon"
+            app:layout_constraintStart_toStartOf="@id/imageRoom"
+            app:layout_constraintTop_toTopOf="@id/imageRoom" />
+
+        <TextView
+            android:id="@+id/infoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/info_text"
+            android:textSize="13sp"
+            android:textColor="#e3e3e3"
+            android:padding="8dp"
+            app:layout_constraintStart_toEndOf="@id/infoIcon"
+            app:layout_constraintTop_toTopOf="@id/infoIcon"
+            app:layout_constraintBottom_toBottomOf="@id/infoIcon"/>
 
         <TextView
             android:id="@+id/textRoomType"
@@ -28,7 +52,9 @@
             android:text="Deluxe Room, 1 King Bed"
             android:textStyle="bold"
             android:textSize="16sp"
-            android:paddingTop="8dp" />
+            android:paddingTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageRoom"/>
 
         <TextView
             android:id="@+id/textPrice"
@@ -36,7 +62,9 @@
             android:layout_height="wrap_content"
             android:text="NT$9,000"
             android:textColor="#FF5722"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textRoomType"/>
 
         <TextView
             android:id="@+id/textFeatures"
@@ -46,7 +74,9 @@
             android:textSize="13sp"
             android:textColor="#555555"
             android:paddingTop="4dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textPrice"/>
 
         <Button
             android:id="@+id/buttonBook"
@@ -55,6 +85,7 @@
             android:text="@string/book_now"
             android:textColor="#FFFFFF"
             android:backgroundTint="#2196F3"
-            android:layout_gravity="end" />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textFeatures"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

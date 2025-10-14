@@ -12,6 +12,20 @@
         android:padding="8dp"
         android:background="#f7f7f7">
 
+        <ImageButton
+            android:id="@+id/buttonMail"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/circle_gray_background"
+            android:src="@drawable/ic_mail_24"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/mail_button"
+            app:tint="#666666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="wrap_content"
@@ -62,6 +76,16 @@
         android:gravity="center"
         android:background="#ffffff">
 
+        <ImageButton
+            android:id="@+id/buttonReplay"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:src="@drawable/ic_replay_24"
+            android:scaleType="centerInside"
+            android:contentDescription="Replay chat"
+            app:tint="#666666" />
+
         <EditText
             android:id="@+id/editTextMessage"
             android:layout_width="0dp"
@@ -70,19 +94,8 @@
             android:hint="@string/input_message"
             android:padding="16dp"
             android:background="@drawable/edittext_background"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" />
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/buttonMic"-->
-<!--            android:layout_width="48dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:background="@null"-->
-<!--            android:src="@android:drawable/ic_btn_speak_now"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:contentDescription="Record voice"-->
-<!--            app:tint="#666666"-->
-<!--            android:layout_marginEnd="8dp" />-->
 
         <ImageButton
             android:id="@+id/buttonSend"

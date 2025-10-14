@@ -1,5 +1,6 @@
 package tw.com.kooler.booking
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -28,6 +29,7 @@ import android.view.KeyEvent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.google.firebase.ai.type.FunctionDeclaration
+import com.google.firebase.ai.type.GenerateContentResponse
 import com.google.firebase.ai.type.Schema
 import com.google.firebase.ai.type.Tool
 import okhttp3.MediaType.Companion.toMediaType
@@ -67,6 +69,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         val editText = findViewById<EditText>(R.id.editTextMessage)
         val buttonSend = findViewById<ImageButton>(R.id.buttonSend)
+        val buttonResult = findViewById<ImageButton>(R.id.buttonResult)
+        val buttonReplay = findViewById<ImageButton>(R.id.buttonReplay)
+        val buttonMail = findViewById<ImageButton>(R.id.buttonMail)
+
+
 
         adapter = MessageAdapter(messageList) { roomType ->
             roomSelected(roomType)
@@ -84,6 +91,29 @@ class MainActivity : AppCompatActivity() {
             sendMessage(editText)
         }
 
+        buttonResult.setOnClickListener {
+            checkResult()
+        }
+
+        buttonReplay.setOnClickListener {
+            restartChat()
+        }
+
+        buttonMail.setOnClickListener {
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = android.net.Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("koolerlee168@gmail.com"))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.mail_subject))
+            }
+
+            try {
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_client)))
+            } catch (e: Exception) {
+                Log.e("MailIntent", "No email app found: ${e.message}")
+            }
+        }
+
+
         // 設置鍵盤 Enter 鍵監聽
         editText.setOnEditorActionListener { _, actionId, event ->
             if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
@@ -93,6 +123,8 @@ class MainActivity : AppCompatActivity() {
                 false // 讓其他事件正常處理
             }
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -100,11 +132,11 @@ class MainActivity : AppCompatActivity() {
         val text = editText.text.toString()
         if (text.isNotEmpty()) {
             // 本地訊息
-            addMessage(text, true)
+            addMessage(text, 1)
             editText.text.clear()
 
             // 加入左側 Loading 訊息
-            val loadingMessage = Message("", false, getTime(), isLoading = true)
+            val loadingMessage = Message("", 0, getTime(), isLoading = true)
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     messageList.add(loadingMessage)
@@ -125,6 +157,8 @@ class MainActivity : AppCompatActivity() {
                     val functionResponse = getExactDate(approximateDate ?: "")
                     val newText = "$text is $functionResponse."
                     response = chat.sendMessage(newText)
+                    // 增加 model message
+                    addModelMessage(response)
 
                     val getRoomTypesFunction = response.functionCalls.find { it.name == "getRoomTypes" }
                     if (getRoomTypesFunction != null) {
@@ -133,8 +167,20 @@ class MainActivity : AppCompatActivity() {
                         val checkoutDate = getRoomTypesFunction.args["checkoutDate"].toString()
 
                         val roomTypes = getRoomTypes(id, checkinDate, checkoutDate).toString()
-                        val roomText = "during the check in and check out date, there are room types $roomTypes available, be sure to answer the user according to those room types, do list them all, no more, no less."
+
+                        // 依照roomTypes資料製作各房型card view, 並顯示在RecyclerView中
+                        showRoomCards(roomTypes)
+
+                        val roomText = """
+                        the available room types list information has already been provided to user with picture and detailed room information by others, 
+                        you don't have to repeat providing the information to user again, just ask user to select room type by clicking button bellow each room type picture,
+                        for your reference only, during the check in and check out date, there are room types $roomTypes available.
+                        """
+
                         response = chat.sendMessage(roomText)
+
+                        // 增加 model message
+                        addModelMessage(response)
                     }
                 }
 
@@ -156,6 +202,9 @@ class MainActivity : AppCompatActivity() {
                     """
 
                     response = chat.sendMessage(roomText)
+
+                    // 增加 model message
+                    addModelMessage(response)
                 }
 
                 val bookingRoomFunction = functionCalls.find { it.name == "bookingRoom" }
@@ -184,23 +233,38 @@ class MainActivity : AppCompatActivity() {
                     val result = bookingRoom(hotel_id, room_type_id, checkin_date, checkout_date, total_price, guest_name, guest_phone, extra_order, specialRequirement, note)
                     val booking_id = result.booking_id
                     val bookingText = if (booking_id != null) {
-                        "已成功預訂房間，訂單編號為 $booking_id"
+                        "Booking success，booking no. $booking_id"
                     } else {
-                        "訂房完成，但未返回訂單編號：${result.message}。錯誤：${result.error}"
+                        "Booking success，but no booking no.：${result.message}。error：${result.error}"
                     }
                     response = chat.sendMessage(bookingText)
+
+                    // 增加 model message
+                    addModelMessage(response)
+
+                    // 增加系統提示
+                    val finalSystemMessage = getString(R.string.lower_left_and_upper_right)
+                    addMessage(finalSystemMessage, 2)
                 }
 
-                // 移除 loading 訊息並添加回應
-                withContext(Dispatchers.Main) {
-                    val lastIndex = messageList.indexOfLast { it.isLoading }
-                    if (lastIndex != -1) {
-                        messageList.removeAt(lastIndex)
-                        adapter.notifyItemRemoved(lastIndex)
-                    }
-                    addMessage(response.text, false)
+                if (functionCalls.isEmpty()) {
+                    // 增加 model message
+                    addModelMessage(response)
                 }
+
             }
+        }
+    }
+
+    suspend fun addModelMessage(response: GenerateContentResponse) {
+        // 移除 loading 訊息並添加回應
+        withContext(Dispatchers.Main) {
+            val lastIndex = messageList.indexOfLast { it.isLoading }
+            if (lastIndex != -1) {
+                messageList.removeAt(lastIndex)
+                adapter.notifyItemRemoved(lastIndex)
+            }
+            addMessage(response.text, 0)
         }
     }
 
@@ -244,7 +308,7 @@ class MainActivity : AppCompatActivity() {
 
                 val message = Message(
                     text = "",
-                    isUser = false,
+                    isUser = 0,
                     time = getTime(),
                     isRoomCard = true,
                     roomInfo = roomInfo
@@ -263,6 +327,8 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun initAI() {
+        addMessage(getString(R.string.start_system_message), 2)
+
         val hotelName = "Grand Hyatt Taipei"
 
         lifecycleScope.launch {
@@ -307,8 +373,9 @@ class MainActivity : AppCompatActivity() {
                     )
                 )
 
-                val response = chat.sendMessage("@string/hello_please_introduce_yourself")
-                addMessage(response.text, false)
+                val response = chat.sendMessage(getString(R.string.hello_please_introduce_yourself))
+
+                addMessage(response.text, 0)
 
             } catch (e: IOException) {
                 Log.e("HotelInfo", "Failed to fetch hotel info: ${e.message}")
@@ -348,7 +415,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("HotelInfo", "無法取得飯店資訊", e)
                 withContext(Dispatchers.Main) {
-                    messageList.add(Message("錯誤：無法取得飯店資訊，請稍後再試。", false, getTime()))
+                    messageList.add(Message("錯誤：無法取得飯店資訊，請稍後再試。", 0, getTime()))
                     adapter.notifyItemInserted(messageList.size - 1)
                     recyclerView.scrollToPosition(messageList.size - 1)
                 }
@@ -357,7 +424,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addMessage(str: String?, isUser: Boolean) {
+    private fun addMessage(str: String?, isUser: Int) {
         val message = Message(str.toString(), isUser, getTime())
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
@@ -627,46 +694,70 @@ class MainActivity : AppCompatActivity() {
                         val jsonResponse = JSONObject(responseBody ?: "{}")
                         val bookingId = jsonResponse.optString("booking_id", null)
                         BookingResponse(
-                            message = jsonResponse.optString("message", "訂房完成"),
+                            message = jsonResponse.optString("message", "Booking success"),
                             booking_id = bookingId,
-                            error = if (bookingId == null) "回應中缺少 booking_id 或為 null" else null
+                            error = if (bookingId == null) "Lost booking_id or booking_id is null" else null
                         )
                     }
                     400, 409, 500 -> {
                         val jsonResponse = JSONObject(responseBody ?: "{}")
                         BookingResponse(
-                            message = jsonResponse.optString("message", "訂房失敗"),
+                            message = jsonResponse.optString("message", "booking fail"),
                             error = jsonResponse.optString("error", response.message)
                         )
                     }
                     else -> {
                         BookingResponse(
-                            message = "訂房過程中發生錯誤。",
-                            error = "未知的狀態碼: ${response.code}"
+                            message = "There is error during booking process。",
+                            error = "Unknown error code: ${response.code}"
                         )
                     }
                 }
             }
         } catch (e: Exception) {
             BookingResponse(
-                message = "訂房過程中發生錯誤。",
-                error = e.message ?: "未知的錯誤"
+                message = "There is error during booking process。",
+                error = e.message ?: "Unknown error during booking process."
             )
         }
     }
 
     private fun roomSelected(roomType: String) {
         lifecycleScope.launch {
-//            withContext(Dispatchers.Main) {
-//                addMessage("您選擇的房型是：$roomType", true)
-//            }
-
-            // TODO: 若想自動進入 AI 訂房流程，可直接送出指令給 chat
+            // 若想自動進入 AI 訂房流程，可直接送出指令給 chat
             val response = chat.sendMessage("User selected room type: $roomType.")
             withContext(Dispatchers.Main) {
-                addMessage(response.text, false)
+                addMessage(response.text, 0)
             }
         }
     }
 
+    private fun checkResult() {
+        val intent = Intent(this, BookingListActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun restartChat() {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.restart_chat_title))
+        builder.setMessage(getString(R.string.are_you_sure_restart_chat))
+
+        builder.setPositiveButton("OK") { _, _ ->
+            lifecycleScope.launch {
+                // Step 1: 清空訊息列表
+                messageList.clear()
+                adapter.notifyDataSetChanged()
+
+                // Step 2: 重新初始化 AI
+                initAI()
+            }
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
 }

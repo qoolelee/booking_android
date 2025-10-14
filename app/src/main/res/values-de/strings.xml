@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Buchungssystem</string>
+    <string name="input_message">Nachricht hier eingeben</string>
+    <string name="hello_please_introduce_yourself">Hallo! Ich bin Janet, Ihre Hotelreservierungsassistentin.</string>
+    <string name="room_type_picture">Zimmerbilder</string>
+    <string name="book_now">JETZT BUCHEN</string>
+    <string name="calendar_button">Buchungsverlauf anzeigen</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">Nachricht senden</string>
+    <string name="info_icon">Info-Symbol</string>
+    <string name="info_text">Tippen Sie auf das Bild, um weitere Details anzuzeigen.</string>
+    <string name="booking_records">Buchungsverlauf</string>
+    <string name="label_booking_id">Buchungsnummer:#%1$d</string>
+    <string name="label_guest_name">Gastname:%1$s</string>
+    <string name="label_guest_phone">Telefonnummer:%1$s</string>
+    <string name="label_check_in">Check-in-Datum:%1$s</string>
+    <string name="label_check_out">Check-out-Datum:%1$s</string>
+    <string name="label_room_id">Zimmernr.:%1$d</string>
+    <string name="label_extra_order">Zusätzliche Bestellung:%1$s</string>
+    <string name="label_total_price">Gesamtpreis:%1$s</string>
+    <string name="label_special">Besondere Anforderungen:%1$s</string>
+    <string name="label_note">Notiz:%1$s</string>
+    <string name="label_none">Keine</string>
+    <string name="info_text_right">Nach rechts wischen, um mehr Bilder zu sehen.</string>
+    <string name="restart_chat_title">Chat neu starten</string>
+    <string name="are_you_sure_restart_chat">Möchten Sie wirklich alle Nachrichten löschen und die Buchung neu starten?</string>
+    <string name="lower_left_and_upper_right">Systemhinweis: Buchung erfolgreich! Klicken Sie oben rechts auf das Kalendersymbol, um Buchungen anzuzeigen, oder unten links, um neu zu starten.</string>
+    <string name="start_system_message">Booking AI System Alpha-Test (mehrsprachig v0.1), alle Rechte vorbehalten (Kooler Media ®).\n\nDiese App kann für Zahnarzt-, Restaurant-, Autovermietung usw. angepasst werden und unterstützt iOS, Android, Web, Line, WhatsApp.\n\nFür Geschäftsanfragen klicken Sie bitte auf das E-Mail-Symbol oben links.\n\nVielen Dank für Ihren Test.</string>
+    <string name="mail_button">E-Mail-Symbol</string>
+    <string name="mail_subject">Booking.AI Anfrage</string>
+    <string name="choose_email_client">E-Mail-App auswählen</string>
+</resources>

@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".BookingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BookingListActivity"
+            android:exported="false" />
+        <activity
             android:name=".RoomDetailActivity"
             android:exported="false" />
         <activity android:name=".MainActivity" />

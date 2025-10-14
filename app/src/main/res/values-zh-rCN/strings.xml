@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">订房系统</string>
+    <string name="input_message">请输入信息</string>
+    <string name="hello_please_introduce_yourself">您好!我是您的酒店预订助手.</string>
+    <string name="room_type_picture">房型照片</string>
+    <string name="book_now">立即预订</string>
+    <string name="calendar_button">查看订单记录</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">发送消息</string>
+    <string name="info_icon">信息图标</string>
+    <string name="info_text">点击图片查看更多详情.</string>
+    <string name="booking_records">预订记录</string>
+    <string name="label_booking_id">订单编号:#%1$d</string>
+    <string name="label_guest_name">客户姓名:%1$s</string>
+    <string name="label_guest_phone">客户电话:%1$s</string>
+    <string name="label_check_in">入住日期:%1$s</string>
+    <string name="label_check_out">退房日期:%1$s</string>
+    <string name="label_room_id">房号:%1$d</string>
+    <string name="label_extra_order">额外服务:%1$s</string>
+    <string name="label_total_price">总价:%1$s</string>
+    <string name="label_special">特殊要求:%1$s</string>
+    <string name="label_note">备注:%1$s</string>
+    <string name="label_none">无</string>
+    <string name="info_text_right">向右滑动查看更多图片.</string>
+    <string name="restart_chat_title">重新开始对话</string>
+    <string name="are_you_sure_restart_chat">确定要清除所有信息并重新开始预订吗?</string>
+    <string name="lower_left_and_upper_right">系统提示:预订成功!您可以点击右上角日历图标查看订单,或点击左下角重新开始新的预订流程.</string>
+    <string name="start_system_message">Booking AI 系统测试版 (多语言 v0.1),版权所有 (Kooler Media ®).\n\n本应用可修改为牙医、餐厅、租车等预约系统,支持 iOS、Android、Web、Line、WhatsApp 等平台.\n\n如需商业合作或问题,请点击左上角邮件图标与我们联系.\n\n感谢您的测试!</string>
+    <string name="mail_button">邮件图标按钮</string>
+    <string name="mail_subject">Booking.AI 咨询</string>
+    <string name="choose_email_client">选择电子邮件应用</string>
+</resources>

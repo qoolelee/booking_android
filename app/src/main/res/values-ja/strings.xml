@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">予約システム</string>
+    <string name="input_message">メッセージを入力してください</string>
+    <string name="hello_please_introduce_yourself">こんにちは!ホテル予約アシスタントのジャネットです.</string>
+    <string name="room_type_picture">部屋タイプの写真</string>
+    <string name="book_now">今すぐ予約</string>
+    <string name="calendar_button">予約履歴を表示</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">メッセージ送信</string>
+    <string name="info_icon">情報アイコン</string>
+    <string name="info_text">写真をタップして詳細を確認してください.</string>
+    <string name="booking_records">予約履歴</string>
+    <string name="label_booking_id">予約番号:#%1$d</string>
+    <string name="label_guest_name">お客様の名前:%1$s</string>
+    <string name="label_guest_phone">電話番号:%1$s</string>
+    <string name="label_check_in">チェックイン日:%1$s</string>
+    <string name="label_check_out">チェックアウト日:%1$s</string>
+    <string name="label_room_id">部屋番号:%1$d</string>
+    <string name="label_extra_order">追加注文:%1$s</string>
+    <string name="label_total_price">合計金額:%1$s</string>
+    <string name="label_special">特別な要望:%1$s</string>
+    <string name="label_note">備考:%1$s</string>
+    <string name="label_none">なし</string>
+    <string name="info_text_right">右にスワイプしてさらに写真を見る.</string>
+    <string name="restart_chat_title">会話を再開</string>
+    <string name="are_you_sure_restart_chat">すべてのメッセージを削除して予約を再開しますか?</string>
+    <string name="lower_left_and_upper_right">システム通知:予約が成功しました!右上のカレンダーアイコンをクリックして予約履歴を確認するか、左下のアイコンをクリックして新しい予約を開始してください.</string>
+    <string name="start_system_message">Booking AI システムα版(多言語 v0.1)、著作権所有 (Kooler Media ®).\n\nこのアプリは歯科、レストラン、レンタカーなどの予約アプリにカスタマイズ可能で、iOS、Android、Web、Line、WhatsApp に対応しています.\n\n商用利用やお問い合わせは左上のメールアイコンからご連絡ください.\n\nご利用ありがとうございます.</string>
+    <string name="mail_button">メールアイコンボタン</string>
+    <string name="mail_subject">Booking.AI 問い合わせ</string>
+    <string name="choose_email_client">メールアプリを選択</string>
+</resources>

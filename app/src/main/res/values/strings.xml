@@ -1,10 +1,32 @@
 <resources>
     <string name="app_name">booking</string>
-    <string name="input_message">輸入訊息</string>
-    <string name="hello_please_introduce_yourself">你好,請介紹自己</string>
-    <string name="room_type_picture">房型圖片</string>
+    <string name="input_message">Input message here</string>
+    <string name="hello_please_introduce_yourself">hello</string>
+    <string name="room_type_picture">room type pictures</string>
     <string name="book_now">BOOKING NOW</string>
     <string name="calendar_button">booking result page</string>
     <string name="app_title">Booking.AI</string>
     <string name="send_message">Send string</string>
+    <string name="info_icon">info icon</string>
+    <string name="info_text">Click on the picture for more details.</string>
+    <string name="booking_records">Booking records</string>
+    <string name="label_booking_id">Order ID:#%1$d</string>
+    <string name="label_guest_name">Guest name:%1$s</string>
+    <string name="label_guest_phone">Guest phone:%1$s</string>
+    <string name="label_check_in">Check-in date:%1$s</string>
+    <string name="label_check_out">Check-out date:%1$s</string>
+    <string name="label_room_id">Room no.:%1$d</string>
+    <string name="label_extra_order">Extra order:%1$s</string>
+    <string name="label_total_price">Total price:%1$s</string>
+    <string name="label_special">special requirements:%1$s</string>
+    <string name="label_note">Note:%1$s</string>
+    <string name="label_none">none</string>
+    <string name="info_text_right">Swipe for more pictures.</string>
+    <string name="restart_chat_title">Restart new chat</string>
+    <string name="are_you_sure_restart_chat">Are you sure you want to clear all messages and restart the booking session?</string>
+    <string name="lower_left_and_upper_right">System note: Booking succeed ! You can check the booking records by clicking upper right calender icon. Or you can restart the whole booking process again by clicking lower left restart icon.</string>
+    <string name="start_system_message">Booking AI system alpha test (multi-languages v0.1), all rights reserved (Kooler Media ®).\n\nApp can be modified for dentist, restaurant, car rental… reservations for iOS, Android, Web, What\'s App. Line platforms.\n\nPlease contact us by clicking upper-left mail icon for business cooperation or for any further questions.\n\nThank you for your testing.</string>
+    <string name="mail_button">icon mail button</string>
+    <string name="mail_subject">Booking.AI enquirement</string>
+    <string name="choose_email_client">Choose Email App</string>
 </resources>

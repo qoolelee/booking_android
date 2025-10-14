@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Système de réservation</string>
+    <string name="input_message">Saisissez un message ici</string>
+    <string name="hello_please_introduce_yourself">Bonjour ! Je suis Janet, votre assistante de réservation d\'hôtel.</string>
+    <string name="room_type_picture">Photos des chambres</string>
+    <string name="book_now">RÉSERVER MAINTENANT</string>
+    <string name="calendar_button">Voir les réservations</string>
+    <string name="app_title">Booking.AI</string>
+    <string name="send_message">Envoyer le message</string>
+    <string name="info_icon">Icône d\'information</string>
+    <string name="info_text">Touchez l\'image pour plus de détails.</string>
+    <string name="booking_records">Historique des réservations</string>
+    <string name="label_booking_id">Numéro de réservation:#%1$d</string>
+    <string name="label_guest_name">Nom du client:%1$s</string>
+    <string name="label_guest_phone">Téléphone:%1$s</string>
+    <string name="label_check_in">Date d\'arrivée:%1$s</string>
+    <string name="label_check_out">Date de départ:%1$s</string>
+    <string name="label_room_id">Numéro de chambre:%1$d</string>
+    <string name="label_extra_order">Commande supplémentaire:%1$s</string>
+    <string name="label_total_price">Prix total:%1$s</string>
+    <string name="label_special">Demandes spéciales:%1$s</string>
+    <string name="label_note">Remarque:%1$s</string>
+    <string name="label_none">Aucune</string>
+    <string name="info_text_right">Balayez vers la droite pour plus de photos.</string>
+    <string name="restart_chat_title">Redémarrer la conversation</string>
+    <string name="are_you_sure_restart_chat">Voulez-vous vraiment tout effacer et recommencer la réservation ?</string>
+    <string name="lower_left_and_upper_right">Note du système : Réservation réussie ! Appuyez sur l\'icône de calendrier en haut à droite pour voir vos réservations, ou sur l\'icône en bas à gauche pour recommencer.</string>
+    <string name="start_system_message">Booking AI Système Alpha Test (multilingue v0.1), tous droits réservés (Kooler Media ®).\n\nL\'application peut être adaptée aux réservations de dentiste, restaurant, location de voiture… pour iOS, Android, Web, Line, WhatsApp.\n\nContactez-nous via l\'icône d\'e-mail en haut à gauche.\n\nMerci pour votre essai.</string>
+    <string name="mail_button">Icône de courrier</string>
+    <string name="mail_subject">Demande Booking.AI</string>
+    <string name="choose_email_client">Choisir une application e-mail</string>
+</resources>
