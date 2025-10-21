@@ -24,9 +24,29 @@
     <string name="info_text_right">Deslice hacia la derecha para ver más fotos.</string>
     <string name="restart_chat_title">Reiniciar chat</string>
     <string name="are_you_sure_restart_chat">¿Seguro que desea borrar todos los mensajes y reiniciar la reserva?</string>
-    <string name="lower_left_and_upper_right">Nota del sistema: ¡Reserva exitosa! Toque el icono del calendario arriba a la derecha para ver sus reservas o el icono de abajo a la izquierda para comenzar una nueva.</string>
-    <string name="start_system_message">Booking AI prueba alfa del sistema (multilingüe v0.1), todos los derechos reservados (Kooler Media ®).\n\nLa aplicación puede adaptarse para reservas de dentistas, restaurantes, alquiler de coches… para iOS, Android, Web, Line, WhatsApp.\n\nContáctenos tocando el icono de correo en la esquina superior izquierda.\n\nGracias por su prueba.</string>
+    <string name="lower_left_and_upper_right">Nota del sistema: ¡Reserva exitosa! Puede ver los registros de reservas en la base de datos tocando el icono del calendario en la parte superior derecha o reiniciar todo el proceso de reserva tocando el icono de reinicio en la parte inferior izquierda.</string>
+    <string name="start_system_message">Nota del sistema: Prueba alfa del sistema Booking AI (multilingüe v0.1), todos los derechos reservados (Kooler Media ®).\n\nOfrecemos servicios personalizados de aplicaciones de agentes de IA LLM para reservas de dentistas, restaurantes y alquiler de coches en plataformas iOS, Android, Web, Line y WhatsApp.\n\nContáctenos tocando el icono de correo en la esquina superior izquierda para cooperación comercial o consultas.\n\nGracias por su prueba.</string>
     <string name="mail_button">Botón de correo</string>
     <string name="mail_subject">Consulta Booking.AI</string>
     <string name="choose_email_client">Elija una aplicación de correo</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="user_agreement_title">Acuerdo del Usuario</string>
+    <string name="user_agreement_content">
+Gracias por usar esta aplicación ("la App").\n
+Antes de continuar, lea cuidadosamente los siguientes términos:\n\n
+1. Política de Privacidad\n
+La App protegerá sus datos personales de acuerdo con las leyes aplicables y su política de privacidad, sin divulgarlos sin autorización.\n\n
+2. Uso de Datos\n
+Los datos recopilados se utilizarán únicamente con fines de prueba y mejora del servicio, no con fines comerciales.\n\n
+3. Aviso de Prueba\n
+La App se proporciona solo con fines de prueba e investigación. Kooler Media no asume responsabilidad por la precisión o integridad de los datos mostrados.\n\n
+4. Restricciones de Contenido\n
+Todo el contenido e imágenes son solo para uso personal o educativo. Se prohíbe cualquier reutilización o redistribución comercial.\n\n
+5. Derechos Reservados\n
+Kooler Media se reserva el derecho de modificar, suspender o retirar los servicios y el acceso de la App en cualquier momento sin previo aviso.\n\n
+Al seleccionar "Aceptar", usted reconoce y acepta los términos anteriores.
+    </string>
+    <string name="agree">Aceptar</string>
+    <string name="disagree">Rechazar</string>
 </resources>

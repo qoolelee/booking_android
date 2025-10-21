@@ -24,9 +24,29 @@
     <string name="info_text_right">Nach rechts wischen, um mehr Bilder zu sehen.</string>
     <string name="restart_chat_title">Chat neu starten</string>
     <string name="are_you_sure_restart_chat">Möchten Sie wirklich alle Nachrichten löschen und die Buchung neu starten?</string>
-    <string name="lower_left_and_upper_right">Systemhinweis: Buchung erfolgreich! Klicken Sie oben rechts auf das Kalendersymbol, um Buchungen anzuzeigen, oder unten links, um neu zu starten.</string>
-    <string name="start_system_message">Booking AI System Alpha-Test (mehrsprachig v0.1), alle Rechte vorbehalten (Kooler Media ®).\n\nDiese App kann für Zahnarzt-, Restaurant-, Autovermietung usw. angepasst werden und unterstützt iOS, Android, Web, Line, WhatsApp.\n\nFür Geschäftsanfragen klicken Sie bitte auf das E-Mail-Symbol oben links.\n\nVielen Dank für Ihren Test.</string>
+    <string name="lower_left_and_upper_right">Systemhinweis: Buchung erfolgreich! Sie können die Buchungsdatensätze in der Datenbank über das Kalendersymbol oben rechts anzeigen oder den gesamten Buchungsvorgang über das Neustartsymbol unten links erneut starten.</string>
+    <string name="start_system_message">Systemhinweis: Booking AI System Alpha-Test (mehrsprachig v0.1), alle Rechte vorbehalten (Kooler Media ®).\n\nWir bieten maßgeschneiderte LLM-KI-Agent-Apps für Zahnärzte, Restaurants, Autovermietungen und andere Reservierungssysteme für iOS, Android, Web, Line und WhatsApp an.\n\nBitte kontaktieren Sie uns über das E-Mail-Symbol oben links für geschäftliche Anfragen oder weitere Fragen.\n\nVielen Dank für Ihren Test.</string>
     <string name="mail_button">E-Mail-Symbol</string>
     <string name="mail_subject">Booking.AI Anfrage</string>
     <string name="choose_email_client">E-Mail-App auswählen</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="user_agreement_title">Nutzervereinbarung</string>
+    <string name="user_agreement_content">
+Vielen Dank, dass Sie diese Anwendung ("die App") verwenden.\n
+Bitte lesen Sie die folgenden Bedingungen sorgfältig durch:\n\n
+1. Datenschutzrichtlinie\n
+Die App schützt Ihre persönlichen Daten gemäß geltendem Recht und gibt diese nicht ohne Genehmigung an Dritte weiter.\n\n
+2. Datenverwendung\n
+Die von der App gesammelten Daten werden ausschließlich zu Test- und Verbesserungszwecken verwendet und nicht kommerziell genutzt.\n\n
+3. Haftungsausschluss\n
+Diese App dient nur Test- und Forschungszwecken. Kooler Media übernimmt keine Verantwortung für die Genauigkeit, Aktualität oder Vollständigkeit der angezeigten Daten.\n\n
+4. Inhaltsbeschränkungen\n
+Alle bereitgestellten Materialien und Bilder dürfen nur für persönliche oder Bildungszwecke verwendet werden. Jegliche kommerzielle Wiederverwendung, Weitergabe oder der Verkauf sind untersagt.\n\n
+5. Rechtevorbehalt\n
+Kooler Media behält sich das Recht vor, den Dienst oder den Zugriff auf die App jederzeit ohne vorherige Ankündigung zu beenden oder zu ändern.\n\n
+Durch Auswahl von "Zustimmen" akzeptieren Sie die oben genannten Bedingungen.
+    </string>
+    <string name="agree">Zustimmen</string>
+    <string name="disagree">Ablehnen</string>
 </resources>

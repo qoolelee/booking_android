@@ -24,9 +24,29 @@
     <string name="info_text_right">右にスワイプしてさらに写真を見る.</string>
     <string name="restart_chat_title">会話を再開</string>
     <string name="are_you_sure_restart_chat">すべてのメッセージを削除して予約を再開しますか?</string>
-    <string name="lower_left_and_upper_right">システム通知:予約が成功しました!右上のカレンダーアイコンをクリックして予約履歴を確認するか、左下のアイコンをクリックして新しい予約を開始してください.</string>
-    <string name="start_system_message">Booking AI システムα版(多言語 v0.1)、著作権所有 (Kooler Media ®).\n\nこのアプリは歯科、レストラン、レンタカーなどの予約アプリにカスタマイズ可能で、iOS、Android、Web、Line、WhatsApp に対応しています.\n\n商用利用やお問い合わせは左上のメールアイコンからご連絡ください.\n\nご利用ありがとうございます.</string>
+    <string name="lower_left_and_upper_right">システム通知：予約が成功しました！右上のカレンダーアイコンをクリックすると、データベース内の予約履歴を確認できます。左下の再開アイコンをクリックすると、新しい予約プロセスを再スタートできます。</string>
+    <string name="start_system_message">システム通知：Booking AI システム アルファテスト（多言語 v0.1）、著作権はすべて (Kooler Media ®) に帰属します。\n\n私たちは歯科医院、レストラン、レンタカーなどの予約向けに、iOS、Android、Web、Line、WhatsApp に対応した LLM AI エージェントアプリのカスタム開発を提供しています。\n\nビジネス協力やお問い合わせは、左上のメールアイコンからご連絡ください。\n\nご利用ありがとうございます。</string>
     <string name="mail_button">メールアイコンボタン</string>
     <string name="mail_subject">Booking.AI 問い合わせ</string>
     <string name="choose_email_client">メールアプリを選択</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="user_agreement_title">利用者同意書</string>
+    <string name="user_agreement_content">
+本アプリ（以下「本アプリ」といいます）をご利用いただきありがとうございます。\n
+ご使用前に以下の内容をよくお読みください。\n\n
+1. プライバシーポリシー\n
+本アプリは、関連法令およびプライバシーポリシーに基づき、利用者の個人情報を適切に保護し、許可なく第三者に開示しません。\n\n
+2. データ使用声明\n
+本アプリで収集されるデータは、テストおよびサービス改善のためのみ使用され、商業目的には使用されません。\n\n
+3. テスト用途に関する免責事項\n
+本アプリはテストおよび研究目的のみで提供されており、Kooler Mediaはアプリ内のデータの正確性、即時性、完全性について一切の責任を負いません。\n\n
+4. コンテンツ利用制限\n
+提供されるデータおよび画像は個人または教育目的に限り使用でき、商業利用、再販売、再配布は禁止されています。\n\n
+5. 権利の留保\n
+Kooler Mediaは、事前の通知なしにいつでも本アプリのサービスおよび利用権を停止・変更・回収する権利を有します。\n\n
+「同意する」を選択することで、上記の条件に同意したものとみなされます。
+    </string>
+    <string name="agree">同意する</string>
+    <string name="disagree">同意しない</string>
 </resources>

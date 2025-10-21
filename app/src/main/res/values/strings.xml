@@ -24,9 +24,29 @@
     <string name="info_text_right">Swipe for more pictures.</string>
     <string name="restart_chat_title">Restart new chat</string>
     <string name="are_you_sure_restart_chat">Are you sure you want to clear all messages and restart the booking session?</string>
-    <string name="lower_left_and_upper_right">System note: Booking succeed ! You can check the booking records by clicking upper right calender icon. Or you can restart the whole booking process again by clicking lower left restart icon.</string>
-    <string name="start_system_message">Booking AI system alpha test (multi-languages v0.1), all rights reserved (Kooler Media ®).\n\nApp can be modified for dentist, restaurant, car rental… reservations for iOS, Android, Web, What\'s App. Line platforms.\n\nPlease contact us by clicking upper-left mail icon for business cooperation or for any further questions.\n\nThank you for your testing.</string>
+    <string name="lower_left_and_upper_right">System note: Booking succeed ! You can check the booking records in database by clicking upper right calender icon. Or you can restart the whole booking process again by clicking lower left restart icon.</string>
+    <string name="start_system_message">System note: Booking AI system alpha test (multi-languages v0.1), all rights reserved (Kooler Media ®).\n\nWe provide custom made service for LLM AI agent App for dentist, restaurant, car rental… reservations for iOS, Android, Web, What\'s App. Line platforms.\n\nPlease contact us by clicking upper-left mail icon for business cooperation or for any further questions.\n\nThank you for your testing.</string>
     <string name="mail_button">icon mail button</string>
     <string name="mail_subject">Booking.AI enquirement</string>
     <string name="choose_email_client">Choose Email App</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="user_agreement_title">User Agreement</string>
+    <string name="user_agreement_content">
+Thank you for using this application ("the App").\n
+Please read the following terms carefully before proceeding:\n\n
+1. Privacy Policy\n
+The App will protect your personal data in accordance with applicable laws and its privacy policy. Your data will not be disclosed to third parties without authorization.\n\n
+2. Data Usage Statement\n
+Data collected by the App is used solely for testing and service improvement purposes, not for any commercial use.\n\n
+3. Testing Purpose Disclaimer\n
+The App is provided for testing and research purposes only. Kooler Media shall not be liable for the accuracy, timeliness, or completeness of any data displayed in the App.\n\n
+4. Content Restrictions\n
+All provided materials and images are for personal or educational use only. Any commercial reuse, resale, or redistribution is strictly prohibited.\n\n
+5. Rights Reserved\n
+Kooler Media reserves the right to modify, suspend, or revoke the App\'s services and user access at any time without prior notice.\n\n
+By selecting "Agree," you acknowledge and accept the terms above.
+    </string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
 </resources>

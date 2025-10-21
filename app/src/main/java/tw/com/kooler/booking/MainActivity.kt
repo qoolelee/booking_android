@@ -77,6 +77,11 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MessageAdapter(messageList) { roomType ->
             roomSelected(roomType)
+
+            // 2️⃣ RecyclerView 自動捲到最底部
+            recyclerView.post {
+                recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+            }
         }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
@@ -174,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                         val roomText = """
                         the available room types list information has already been provided to user with picture and detailed room information by others, 
                         you don't have to repeat providing the information to user again, just ask user to select room type by clicking button bellow each room type picture,
-                        for your reference only, during the check in and check out date, there are room types $roomTypes available.
+                        for your reference only, during the check in and check out date, there are room types $roomTypes available, according to those information, calculate the total price for user.
                         """
 
                         response = chat.sendMessage(roomText)
@@ -198,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     val roomText = """
                         the available room types list information has already been provided to user with picture and detailed room information by others, 
                         you don't have to repeat providing the information to user again, just ask user to select room type by clicking button bellow each room type picture,
-                        for your reference only, during the check in and check out date, there are room types $roomTypes available.
+                        for your reference only, during the check in and check out date, there are room types $roomTypes available, according to those information, calculate the total price for user.
                     """
 
                     response = chat.sendMessage(roomText)
@@ -354,7 +359,7 @@ class MainActivity : AppCompatActivity() {
                     'Notes': [
                       'At the beginning of the reservation conversation, briefly explain the purpose of the conversation and the necessary customer information to complete the reservation.',
                       'If the conversation deviates from the reservation topic, return to it politely and quickly.',
-                      'In each conversation, limit the number of questions in one or fewer.',
+                      'In each conversation, limit the number of questions to one or fewer.',
                       'Before starting the reservation, be sure to list all the information gathered from the user, and ask for confirmation.',
                       'Once the reservation is completed, politely inform the customer that the reservation is successful and provide them with the reservation details.',
                     ]

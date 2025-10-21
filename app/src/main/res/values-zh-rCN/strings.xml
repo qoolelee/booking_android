@@ -24,9 +24,29 @@
     <string name="info_text_right">向右滑动查看更多图片.</string>
     <string name="restart_chat_title">重新开始对话</string>
     <string name="are_you_sure_restart_chat">确定要清除所有信息并重新开始预订吗?</string>
-    <string name="lower_left_and_upper_right">系统提示:预订成功!您可以点击右上角日历图标查看订单,或点击左下角重新开始新的预订流程.</string>
-    <string name="start_system_message">Booking AI 系统测试版 (多语言 v0.1),版权所有 (Kooler Media ®).\n\n本应用可修改为牙医、餐厅、租车等预约系统,支持 iOS、Android、Web、Line、WhatsApp 等平台.\n\n如需商业合作或问题,请点击左上角邮件图标与我们联系.\n\n感谢您的测试!</string>
+    <string name="lower_left_and_upper_right">系统提示：预订成功！您可以点击右上角日历图标查看数据库中的预订记录，或点击左下角重新开始新的预订流程。</string>
+    <string name="start_system_message">系统提示：Booking AI 系统测试版 (多语言 v0.1)，版权所有 (Kooler Media ®)。\n\n我们提供定制化 LLM AI 智能助理应用开发服务，适用于牙医、餐厅、租车等预约系统，支持 iOS、Android、Web、Line、WhatsApp 平台。\n\n如需商业合作或有任何问题，请点击左上角邮件图标与我们联系。\n\n感谢您的测试！</string>
     <string name="mail_button">邮件图标按钮</string>
     <string name="mail_subject">Booking.AI 咨询</string>
     <string name="choose_email_client">选择电子邮件应用</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="user_agreement_title">用户同意书</string>
+    <string name="user_agreement_content">
+感谢您使用本应用程序（以下简称“本App”）。\n
+在开始使用前，请仔细阅读以下条款：\n\n
+1. 隐私政策\n
+本App将依据相关法律与隐私政策，妥善保护您的个人信息，不会在未经授权的情况下向第三方披露。\n\n
+2. 数据使用声明\n
+本App收集的数据仅用于测试和改进服务，不作任何商业用途。\n\n
+3. 测试用途声明\n
+本App仅供测试与研究使用，Kooler Media 对本App所显示的数据准确性、及时性或完整性不承担任何责任。\n\n
+4. 内容限制\n
+所提供的资料与图片仅限个人或教育用途，禁止用于商业再利用、转售或传播。\n\n
+5. 权利保留\n
+Kooler Media 保留随时终止、修改或收回本App服务与使用权的权利，恕不另行通知。\n\n
+如您同意以上条款，请点击“同意”继续使用本App。
+    </string>
+    <string name="agree">同意</string>
+    <string name="disagree">不同意</string>
 </resources>
