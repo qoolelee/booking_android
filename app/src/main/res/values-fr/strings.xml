@@ -33,7 +33,7 @@
     <string name="login_password">Password</string>
     <string name="user_agreement_title">Accord de l\'utilisateur</string>
     <string name="user_agreement_content">
-Merci d\'utiliser cette application ("l\'App").\n
+Merci d\'utiliser cette application ("l\'App").\n\nDemande de mot de passe d\'inscription email: \nkoolerlee168@gmail.com\n\n
 Veuillez lire attentivement les conditions suivantes avant de continuer :\n\n
 1. Politique de confidentialité\n
 L\'App protège vos données personnelles conformément aux lois applicables et à sa politique de confidentialité, sans divulgation non autorisée.\n\n
@@ -49,4 +49,5 @@ En cliquant sur "Accepter", vous reconnaissez et acceptez les conditions ci-dess
     </string>
     <string name="agree">Accepter</string>
     <string name="disagree">Refuser</string>
+    <string name="please_wait">Veuillez patienter, je vérifie....</string>
 </resources>

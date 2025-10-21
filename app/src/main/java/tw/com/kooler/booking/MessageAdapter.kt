@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class MessageAdapter(private val messages: MutableList<Message>,
-                     private val onRoomSelected: (String) -> Unit
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageAdapter(
+    private val messages: MutableList<Message>,
+    private val onRoomSelected: (String) -> Unit,
+    private val onShowLoading: () -> Unit,
+    private val onHideLoading: () -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == 1) {
@@ -34,20 +34,19 @@ class MessageAdapter(private val messages: MutableList<Message>,
 
         if (holder is MessageViewHolder) {
             if (message.isUser == 1) {
-                // 顯示右側
+                // 顯示右側（使用者訊息）
                 holder.textRight.visibility = View.VISIBLE
                 holder.timeRight.visibility = View.VISIBLE
-
                 holder.imageLeft.visibility = View.GONE
                 holder.textLeft.visibility = View.GONE
                 holder.timeLeft.visibility = View.GONE
-                holder.progressLeft.visibility = View.GONE
+                holder.imageGifLoadingLeft.visibility = View.GONE
 
                 holder.textRight.text = message.text
                 holder.timeRight.text = message.time
             } else {
-                // 顯示左側
-                holder.imageLeft.visibility = View.VISIBLE // icon
+                // 顯示左側（AI或系統）
+                holder.imageLeft.visibility = View.VISIBLE
                 if (message.isUser == 2) {
                     holder.imageLeft.setImageResource(R.drawable.ic_booking_256)
                 } else {
@@ -57,12 +56,19 @@ class MessageAdapter(private val messages: MutableList<Message>,
                 holder.timeRight.visibility = View.GONE
 
                 if (message.isLoading) {
-                    holder.progressLeft.visibility = View.VISIBLE
-                    holder.textLeft.visibility = View.GONE
-                    holder.timeLeft.visibility = View.GONE
-                } else {
-                    holder.progressLeft.visibility = View.GONE
+                    // 顯示 GIF 動畫
+                    holder.imageGifLoadingLeft.visibility = View.VISIBLE
+                    holder.textLeft.visibility = View.VISIBLE
+                    holder.timeLeft.visibility = View.VISIBLE
+                    holder.textLeft.text = message.text
+                    holder.timeLeft.text = message.time
 
+                    Glide.with(holder.itemView.context)
+                        .asGif()
+                        .load(R.drawable.g1)
+                        .into(holder.imageGifLoadingLeft)
+                } else {
+                    holder.imageGifLoadingLeft.visibility = View.GONE
                     holder.textLeft.visibility = View.VISIBLE
                     holder.timeLeft.visibility = View.VISIBLE
                     holder.textLeft.text = message.text
@@ -78,6 +84,7 @@ class MessageAdapter(private val messages: MutableList<Message>,
                 .load(room.pictures.firstOrNull())
                 .placeholder(R.drawable.ic_image_placeholder)
                 .into(holder.imageRoom)
+
             holder.imageRoom.setOnClickListener {
                 val context = holder.itemView.context
                 if (context is MainActivity) {
@@ -86,13 +93,13 @@ class MessageAdapter(private val messages: MutableList<Message>,
                     intent.putExtra("price", room.price)
                     intent.putExtra("features", room.features)
                     intent.putStringArrayListExtra("pictures", ArrayList(room.pictures))
-                    context.roomDetailLauncher.launch(intent) // ✅ 使用 MainActivity 的 launcher
+                    context.roomDetailLauncher.launch(intent)
                 }
             }
 
-
             holder.buttonBook.setOnClickListener {
-                onRoomSelected(room.type)
+                onShowLoading() // 顯示 GIF
+                onRoomSelected(room.type) // 通知 MainActivity
             }
         }
     }
@@ -102,7 +109,7 @@ class MessageAdapter(private val messages: MutableList<Message>,
     override fun getItemViewType(position: Int): Int {
         val message = messages[position]
         return when {
-            message.isRoomCard -> 1 // 新增房型卡片
+            message.isRoomCard -> 1
             else -> 0
         }
     }
@@ -111,7 +118,9 @@ class MessageAdapter(private val messages: MutableList<Message>,
         val imageLeft: ImageView = itemView.findViewById(R.id.imageAvatarLeft)
         val textLeft: TextView = itemView.findViewById(R.id.textMessageLeft)
         val timeLeft: TextView = itemView.findViewById(R.id.textTimeLeft)
-        val progressLeft: ProgressBar = itemView.findViewById(R.id.progressLoadingLeft)
+
+        // 改為 GIF ImageView
+        val imageGifLoadingLeft: ImageView = itemView.findViewById(R.id.imageGifLoadingLeft)
 
         val textRight: TextView = itemView.findViewById(R.id.textMessageRight)
         val timeRight: TextView = itemView.findViewById(R.id.textTimeRight)
@@ -124,6 +133,4 @@ class MessageAdapter(private val messages: MutableList<Message>,
         val textFeatures: TextView = itemView.findViewById(R.id.textFeatures)
         val buttonBook: Button = itemView.findViewById(R.id.buttonBook)
     }
-
-
 }

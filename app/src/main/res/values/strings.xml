@@ -33,7 +33,7 @@
     <string name="login_password">Password</string>
     <string name="user_agreement_title">User Agreement</string>
     <string name="user_agreement_content">
-Thank you for using this application ("the App").\n
+Thank you for using this application ("the App").\n\nRequest for register password email: \nkoolerlee168@gmail.com\n\n
 Please read the following terms carefully before proceeding:\n\n
 1. Privacy Policy\n
 The App will protect your personal data in accordance with applicable laws and its privacy policy. Your data will not be disclosed to third parties without authorization.\n\n
@@ -49,4 +49,5 @@ By selecting "Agree," you acknowledge and accept the terms above.
     </string>
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
+    <string name="please_wait">Please wait, I\'m checking</string>
 </resources>

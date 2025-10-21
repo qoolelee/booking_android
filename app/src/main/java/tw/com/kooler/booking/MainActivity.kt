@@ -75,14 +75,33 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        adapter = MessageAdapter(messageList) { roomType ->
-            roomSelected(roomType)
-
-            // 2️⃣ RecyclerView 自動捲到最底部
-            recyclerView.post {
-                recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+        adapter = MessageAdapter(
+            messageList,
+            onRoomSelected = { roomType ->
+                roomSelected(roomType)
+                recyclerView.post {
+                    recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+                }
+            },
+            onShowLoading = {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val loadingMsg = Message("", 0, getTime(), isLoading = true)
+                    messageList.add(loadingMsg)
+                    adapter.notifyItemInserted(messageList.size - 1)
+                    recyclerView.scrollToPosition(messageList.size - 1)
+                }
+            },
+            onHideLoading = {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val index = messageList.indexOfLast { it.isLoading }
+                    if (index != -1) {
+                        messageList.removeAt(index)
+                        adapter.notifyItemRemoved(index)
+                    }
+                }
             }
-        }
+        )
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
@@ -141,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             editText.text.clear()
 
             // 加入左側 Loading 訊息
-            val loadingMessage = Message("", 0, getTime(), isLoading = true)
+            val loadingMessage = Message(getString(R.string.please_wait), 0, getTime(), isLoading = true)
             lifecycleScope.launch {
                 withContext(Dispatchers.Main) {
                     messageList.add(loadingMessage)
@@ -732,6 +751,11 @@ class MainActivity : AppCompatActivity() {
             // 若想自動進入 AI 訂房流程，可直接送出指令給 chat
             val response = chat.sendMessage("User selected room type: $roomType.")
             withContext(Dispatchers.Main) {
+                val lastIndex = messageList.indexOfLast { it.isLoading }
+                if (lastIndex != -1) {
+                    messageList.removeAt(lastIndex)
+                    adapter.notifyItemRemoved(lastIndex)
+                }
                 addMessage(response.text, 0)
             }
         }

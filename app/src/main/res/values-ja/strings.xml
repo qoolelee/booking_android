@@ -33,7 +33,7 @@
     <string name="login_password">Password</string>
     <string name="user_agreement_title">利用者同意書</string>
     <string name="user_agreement_content">
-本アプリ（以下「本アプリ」といいます）をご利用いただきありがとうございます。\n
+本アプリ（以下「本アプリ」といいます）をご利用いただきありがとうございます。\n\n登録パスワードのリクエスト email: \nkoolerlee168@gmail.com\n\n
 ご使用前に以下の内容をよくお読みください。\n\n
 1. プライバシーポリシー\n
 本アプリは、関連法令およびプライバシーポリシーに基づき、利用者の個人情報を適切に保護し、許可なく第三者に開示しません。\n\n
@@ -49,4 +49,5 @@ Kooler Mediaは、事前の通知なしにいつでも本アプリのサービ�
     </string>
     <string name="agree">同意する</string>
     <string name="disagree">同意しない</string>
+    <string name="please_wait">しばらくお待ちください。確認中です。</string>
 </resources>

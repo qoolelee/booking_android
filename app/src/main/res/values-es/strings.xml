@@ -33,7 +33,7 @@
     <string name="login_password">Password</string>
     <string name="user_agreement_title">Acuerdo del Usuario</string>
     <string name="user_agreement_content">
-Gracias por usar esta aplicación ("la App").\n
+Gracias por usar esta aplicación ("la App").\n\nSolicitud de contraseña de registro email: \nkoolerlee168@gmail.com\n\n
 Antes de continuar, lea cuidadosamente los siguientes términos:\n\n
 1. Política de Privacidad\n
 La App protegerá sus datos personales de acuerdo con las leyes aplicables y su política de privacidad, sin divulgarlos sin autorización.\n\n
@@ -49,4 +49,5 @@ Al seleccionar "Aceptar", usted reconoce y acepta los términos anteriores.
     </string>
     <string name="agree">Aceptar</string>
     <string name="disagree">Rechazar</string>
+    <string name="please_wait">Por favor espere, estoy comprobando....</string>
 </resources>

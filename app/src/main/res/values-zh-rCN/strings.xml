@@ -33,7 +33,7 @@
     <string name="login_password">Password</string>
     <string name="user_agreement_title">用户同意书</string>
     <string name="user_agreement_content">
-感谢您使用本应用程序（以下简称“本App”）。\n
+感谢您使用本应用程序（以下简称“本App”）。\n\n请求注册密码 email: \nkoolerlee168@gmail.com\n\n
 在开始使用前，请仔细阅读以下条款：\n\n
 1. 隐私政策\n
 本App将依据相关法律与隐私政策，妥善保护您的个人信息，不会在未经授权的情况下向第三方披露。\n\n
@@ -49,4 +49,5 @@ Kooler Media 保留随时终止、修改或收回本App服务与使用权的权�
     </string>
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
+    <string name="please_wait">请稍候，我正在检查....</string>
 </resources>

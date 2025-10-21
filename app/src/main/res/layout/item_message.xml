@@ -19,16 +19,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CircleImageView" />
 
-    <ProgressBar
-        android:id="@+id/progressLoadingLeft"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageGifLoadingLeft"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@id/imageAvatarLeft"
-        app:layout_constraintEnd_toEndOf="@id/imageAvatarLeft"
-        app:layout_constraintTop_toTopOf="@id/imageAvatarLeft"
-        app:layout_constraintBottom_toBottomOf="@id/imageAvatarLeft"
-        style="?android:attr/progressBarStyleSmall"/>
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/CircleImageView"
+        android:src="@drawable/g1" />
 
     <TextView
         android:id="@+id/textMessageLeft"
