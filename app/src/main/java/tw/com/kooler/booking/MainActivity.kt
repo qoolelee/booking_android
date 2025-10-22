@@ -404,6 +404,8 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+        // test
     }
 
     private fun initAI() {
