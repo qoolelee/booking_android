@@ -25,7 +25,7 @@
     <string name="restart_chat_title">重新開始對話</string>
     <string name="are_you_sure_restart_chat">確定要清除所有訊息並重新開始預訂嗎？</string>
     <string name="lower_left_and_upper_right">系統提示：訂房成功！您可以點擊右上角行事曆圖示查看資料庫中的訂房紀錄，或點擊左下角重新開始新的訂房流程。</string>
-    <string name="start_system_message">系統提示：Booking AI 系統測試版 (多語系 v0.1)，版權所有 (Kooler Media ®)。\n\n我們提供客製化 LLM AI 智慧助理應用程式開發服務，適用於牙醫、餐廳、租車等預約系統，支援 iOS、Android、Web、Line、WhatsApp 平台。\n\n如需商業合作或有任何問題，請點擊左上角信件圖示與我們聯繫。\n\n感謝您的測試！</string>
+    <string name="start_system_message">系統提示：Booking AI 系統測試版 (多語系 %1$s)，版權所有 (Kooler Media ®)。\n\n我們提供客製化 LLM AI 智慧助理應用程式開發服務，適用於牙醫、餐廳、租車等預約系統，支援 iOS、Android、Web、Line、WhatsApp 平台。\n\n如需商業合作或有任何問題，請點擊左上角信件圖示與我們聯繫。\n\n感謝您的測試！</string>
     <string name="mail_button">信件圖示按鈕</string>
     <string name="mail_subject">Booking.AI 詢問</string>
     <string name="choose_email_client">選擇電子郵件應用程式</string>
@@ -50,4 +50,5 @@ Kooler Media 保留隨時終止、修改或收回本App服務與使用權的權�
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="please_wait">請稍候，我正在檢查....</string>
+    <string name="current_version">Version 0.2</string>
 </resources>

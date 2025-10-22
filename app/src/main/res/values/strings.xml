@@ -25,7 +25,7 @@
     <string name="restart_chat_title">Restart new chat</string>
     <string name="are_you_sure_restart_chat">Are you sure you want to clear all messages and restart the booking session?</string>
     <string name="lower_left_and_upper_right">System note: Booking succeed ! You can check the booking records in database by clicking upper right calender icon. Or you can restart the whole booking process again by clicking lower left restart icon.</string>
-    <string name="start_system_message">System note: Booking AI system alpha test (multi-languages v0.1), all rights reserved (Kooler Media ®).\n\nWe provide custom made service for LLM AI agent App for dentist, restaurant, car rental… reservations for iOS, Android, Web, What\'s App. Line platforms.\n\nPlease contact us by clicking upper-left mail icon for business cooperation or for any further questions.\n\nThank you for your testing.</string>
+    <string name="start_system_message">System note: Booking AI system alpha test (multi-languages %1$s), all rights reserved (Kooler Media ®).\n\nWe provide custom made service for LLM AI agent App for dentist, restaurant, car rental… reservations for iOS, Android, Web, What\'s App. Line platforms.\n\nPlease contact us by clicking upper-left mail icon for business cooperation or for any further questions.\n\nThank you for your testing.</string>
     <string name="mail_button">icon mail button</string>
     <string name="mail_subject">Booking.AI enquirement</string>
     <string name="choose_email_client">Choose Email App</string>
@@ -50,4 +50,5 @@ By selecting "Agree," you acknowledge and accept the terms above.
     <string name="agree">Agree</string>
     <string name="disagree">Disagree</string>
     <string name="please_wait">Please wait, I\'m checking</string>
+    <string name="current_version">Version 0.2</string>
 </resources>

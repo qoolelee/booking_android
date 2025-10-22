@@ -1,5 +1,6 @@
 package tw.com.kooler.booking
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -40,6 +41,13 @@ import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+// ✅ 新增：Insets 相關 import
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import kotlin.math.max
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -60,11 +68,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         recyclerView = findViewById(R.id.recyclerView)
         val editText = findViewById<EditText>(R.id.editTextMessage)
@@ -73,7 +81,52 @@ class MainActivity : AppCompatActivity() {
         val buttonReplay = findViewById<ImageButton>(R.id.buttonReplay)
         val buttonMail = findViewById<ImageButton>(R.id.buttonMail)
 
+        // ✅ 取得底部輸入區容器（新的 id：inputArea），以及頁面根視圖
+        val inputArea = findViewById<View>(R.id.inputArea)
+        val rootView = findViewById<View>(android.R.id.content)
 
+        // ✅ 監聽鍵盤開啟 / 關閉事件，調整 RecyclerView 底部
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+
+            if (keypadHeight > screenHeight * 0.15) {
+                // 鍵盤開啟時：讓RecyclerView自動滑到底部
+                recyclerView.post {
+                    recyclerView.scrollToPosition(adapter.itemCount - 1)
+                }
+            }
+        }
+
+        // ✅ 動態偵測是否被系統底部導覽列覆蓋：只有在有覆蓋時才加 padding
+        //    也一併把 RecyclerView 的 bottom padding 加上，避免最後一則訊息被擋住
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
+            val navInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val bottomInset = navInsets.bottom // > 0 表示有底部導覽列可能覆蓋
+
+            // 保留原本 padding 值，只在需要時補上底部 insets
+            val origInputBottom = inputArea.paddingBottom
+            inputArea.setPadding(
+                inputArea.paddingLeft,
+                inputArea.paddingTop,
+                inputArea.paddingRight,
+                if (bottomInset > 0) bottomInset else 0
+            )
+
+            // 讓 RecyclerView 也有足夠底部空間（保留原本 padding 再加上 insets）
+            val origRvBottom = recyclerView.paddingBottom
+            val newRvBottom = max(origRvBottom, origRvBottom + (if (bottomInset > 0) bottomInset else 0))
+            recyclerView.setPadding(
+                recyclerView.paddingLeft,
+                recyclerView.paddingTop,
+                recyclerView.paddingRight,
+                newRvBottom
+            )
+
+            insets
+        }
 
         adapter = MessageAdapter(
             messageList,
@@ -105,14 +158,22 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+
         // 載入儲存的訊息
         lifecycleScope.launch {
             initAI()
         }
 
-        // 設置按鈕點擊事件
+        // ✅ 發送訊息按鈕 + 自動隱藏鍵盤
         buttonSend.setOnClickListener {
-            sendMessage(editText)
+            val text = editText.text.toString()
+            if (text.isNotEmpty()) {
+                sendMessage(editText)
+
+                // 🔽 自動隱藏鍵盤
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(editText.windowToken, 0)
+            }
         }
 
         buttonResult.setOnClickListener {
@@ -137,18 +198,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         // 設置鍵盤 Enter 鍵監聽
-        editText.setOnEditorActionListener { _, actionId, event ->
+        editText.setOnEditorActionListener { _, _, event ->
             if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 sendMessage(editText)
-                true // 表示事件已處理
+                true
             } else {
-                false // 讓其他事件正常處理
+                false
             }
         }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -175,7 +233,7 @@ class MainActivity : AppCompatActivity() {
                 val functionCalls = response.functionCalls
                 val getExactDateFunction = functionCalls.find { it.name == "getExactDate" }
                 if (getExactDateFunction != null) {
-                    val approximateDate = getExactDateFunction?.let {
+                    val approximateDate = getExactDateFunction.let {
                         it.args["approximateDate"].toString()
                     }
                     val functionResponse = getExactDate(approximateDate ?: "")
@@ -261,10 +319,10 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         "Booking success，but no booking no.：${result.message}。error：${result.error}"
                     }
-                    response = chat.sendMessage(bookingText)
+                    val response2 = chat.sendMessage(bookingText)
 
                     // 增加 model message
-                    addModelMessage(response)
+                    addModelMessage(response2)
 
                     // 增加系統提示
                     val finalSystemMessage = getString(R.string.lower_left_and_upper_right)
@@ -275,7 +333,6 @@ class MainActivity : AppCompatActivity() {
                     // 增加 model message
                     addModelMessage(response)
                 }
-
             }
         }
     }
@@ -349,9 +406,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initAI() {
-        addMessage(getString(R.string.start_system_message), 2)
+        addMessage(getString(R.string.start_system_message, getString(R.string.current_version)), 2)
 
         val hotelName = "Grand Hyatt Taipei"
 

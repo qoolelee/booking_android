@@ -25,7 +25,7 @@
     <string name="restart_chat_title">Reiniciar chat</string>
     <string name="are_you_sure_restart_chat">¿Seguro que desea borrar todos los mensajes y reiniciar la reserva?</string>
     <string name="lower_left_and_upper_right">Nota del sistema: ¡Reserva exitosa! Puede ver los registros de reservas en la base de datos tocando el icono del calendario en la parte superior derecha o reiniciar todo el proceso de reserva tocando el icono de reinicio en la parte inferior izquierda.</string>
-    <string name="start_system_message">Nota del sistema: Prueba alfa del sistema Booking AI (multilingüe v0.1), todos los derechos reservados (Kooler Media ®).\n\nOfrecemos servicios personalizados de aplicaciones de agentes de IA LLM para reservas de dentistas, restaurantes y alquiler de coches en plataformas iOS, Android, Web, Line y WhatsApp.\n\nContáctenos tocando el icono de correo en la esquina superior izquierda para cooperación comercial o consultas.\n\nGracias por su prueba.</string>
+    <string name="start_system_message">Nota del sistema: Prueba alfa del sistema Booking AI (multilingüe %1$s), todos los derechos reservados (Kooler Media ®).\n\nOfrecemos servicios personalizados de aplicaciones de agentes de IA LLM para reservas de dentistas, restaurantes y alquiler de coches en plataformas iOS, Android, Web, Line y WhatsApp.\n\nContáctenos tocando el icono de correo en la esquina superior izquierda para cooperación comercial o consultas.\n\nGracias por su prueba.</string>
     <string name="mail_button">Botón de correo</string>
     <string name="mail_subject">Consulta Booking.AI</string>
     <string name="choose_email_client">Elija una aplicación de correo</string>
@@ -50,4 +50,5 @@ Al seleccionar "Aceptar", usted reconoce y acepta los términos anteriores.
     <string name="agree">Aceptar</string>
     <string name="disagree">Rechazar</string>
     <string name="please_wait">Por favor espere, estoy comprobando....</string>
+    <string name="current_version">Version 0.2</string>
 </resources>

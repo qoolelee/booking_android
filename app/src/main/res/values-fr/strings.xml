@@ -25,7 +25,7 @@
     <string name="restart_chat_title">Redémarrer la conversation</string>
     <string name="are_you_sure_restart_chat">Voulez-vous vraiment tout effacer et recommencer la réservation ?</string>
     <string name="lower_left_and_upper_right">Note du système : Réservation réussie ! Vous pouvez consulter les enregistrements de réservation dans la base de données en appuyant sur l\’icône du calendrier en haut à droite, ou redémarrer tout le processus de réservation en appuyant sur l\’icône de redémarrage en bas à gauche.</string>
-    <string name="start_system_message">Note du système : Booking AI version alpha (multilingue v0.1), tous droits réservés (Kooler Media ®).\n\nNous proposons un service sur mesure pour les applications d\’agents IA LLM destinées aux réservations de dentistes, restaurants, locations de voitures… sur iOS, Android, Web, Line et WhatsApp.\n\nVeuillez nous contacter via l\’icône de courrier en haut à gauche pour toute collaboration commerciale ou question.\n\nMerci pour vos tests.</string>
+    <string name="start_system_message">Note du système : Booking AI version alpha (multilingue %1$s), tous droits réservés (Kooler Media ®).\n\nNous proposons un service sur mesure pour les applications d\’agents IA LLM destinées aux réservations de dentistes, restaurants, locations de voitures… sur iOS, Android, Web, Line et WhatsApp.\n\nVeuillez nous contacter via l\’icône de courrier en haut à gauche pour toute collaboration commerciale ou question.\n\nMerci pour vos tests.</string>
     <string name="mail_button">Icône de courrier</string>
     <string name="mail_subject">Demande Booking.AI</string>
     <string name="choose_email_client">Choisir une application e-mail</string>
@@ -50,4 +50,5 @@ En cliquant sur "Accepter", vous reconnaissez et acceptez les conditions ci-dess
     <string name="agree">Accepter</string>
     <string name="disagree">Refuser</string>
     <string name="please_wait">Veuillez patienter, je vérifie....</string>
+    <string name="current_version">Version 0.2</string>
 </resources>

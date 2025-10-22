@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- 網路存取權限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,30 +14,51 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="31">
+
+        <!-- 登入畫面 -->
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <!-- 訂房細節 -->
         <activity
             android:name=".BookingDetailActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 訂房列表 -->
         <activity
             android:name=".BookingListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 房型詳細畫面 -->
         <activity
             android:name=".RoomDetailActivity"
-            android:exported="false" />
-        <activity android:name=".MainActivity" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 主聊天畫面 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:resizeableActivity="true" />
+
+        <!-- 啟動畫面 -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

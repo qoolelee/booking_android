@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#ffffff"
+    android:fitsSystemWindows="true">
 
     <!-- Title 區域 -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/headerArea"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="#f7f7f7"
         android:padding="8dp"
-        android:background="#f7f7f7">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
             android:id="@+id/buttonMail"
@@ -20,7 +26,6 @@
             android:background="@drawable/circle_gray_background"
             android:src="@drawable/ic_mail_24"
             android:scaleType="centerInside"
-            android:contentDescription="@string/mail_button"
             app:tint="#666666"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,13 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_title"
-            android:textColor="#222222"
+            android:textColor="#222"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageButton
             android:id="@+id/buttonResult"
@@ -47,34 +52,44 @@
             android:background="@drawable/circle_gray_background"
             android:src="@drawable/baseline_calendar_month_24"
             android:scaleType="centerInside"
-            android:contentDescription="@string/calendar_button"
             app:tint="#666666"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- RecyclerView 顯示聊天訊息 -->
+    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:padding="16dp"
-        android:background="#ffffff"
+        android:clipToPadding="false"
+        android:overScrollMode="always"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="beforeDescendants"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/headerArea"
+        app:layout_constraintBottom_toTopOf="@id/inputArea"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <!-- 輸入訊息區 -->
+    <!-- 底部輸入區 -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/inputArea"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
         android:gravity="center"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:fitsSystemWindows="true"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
             android:id="@+id/buttonReplay"
@@ -82,8 +97,6 @@
             android:layout_height="48dp"
             android:background="@null"
             android:src="@drawable/ic_replay_24"
-            android:scaleType="centerInside"
-            android:contentDescription="Replay chat"
             app:tint="#666666" />
 
         <EditText
@@ -103,8 +116,7 @@
             android:layout_height="48dp"
             android:background="@drawable/circle_gray_background"
             android:src="@drawable/arrow_upward_24dp"
-            android:scaleType="centerInside"
-            android:contentDescription="@string/send_message"
             app:tint="#666666" />
     </LinearLayout>
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
